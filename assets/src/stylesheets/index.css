@@ -1,0 +1,41 @@
+.placeholder-h30{
+    width: 100%;
+    height: 30px;
+}
+.width60 {
+    width: 60%;
+    margin: 0 auto;
+}
+.width30{
+    width: 30%;
+}
+.btn-mr20{
+    margin-right: 20px;
+}
+.btn-mr10{
+    margin-right: 10px;
+}
+.btn-mb20{
+    margin-bottom: 20px;
+}
+
+.font-size20{
+    font-size: 20px;
+}
+
+.text-center{
+    text-align: center;
+}
+
+.checked{
+    background-color: #F8F8F8;
+}
+
+.cursor-hand{
+    cursor: hand;
+}
+
+.page-title{
+    font-size: 35px;
+    margin: 10px 0 30px 0;
+}
