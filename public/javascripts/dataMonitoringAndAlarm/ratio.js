@@ -6,7 +6,6 @@ module.exports.getRatio = function (req, res, next) {
          password: 'TCDAvDol9gAczLav',
          database: 'monitor'
     });
-    //let sql='select * from alert;';
     let type=req.param('type');
     let table=req.param('table');
     let sql='select * from '+table+' where data_type='+"'"+type+"'";
