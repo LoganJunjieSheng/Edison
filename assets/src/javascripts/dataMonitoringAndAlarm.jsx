@@ -1,9 +1,13 @@
-import React, { PureComponent } from 'react';
-import { Button, ButtonGroup, PageHeader, Col, Row, ListGroup, ListGroupItem, Panel, Table } from 'react-bootstrap';
+import React from 'react';
+import { Col, Table, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
 import ModalPop from './components/modalPop'
 import SideBar from './components/sideBar'
 import AlarmTable from './components/alarmTable'
+import PaginationAdvanced from './components/paginationAdvanced'
 import fetch from 'node-fetch';
+// import * as d3 from "d3";
+// import * as echarts from 'echarts';
+import ReactEcharts from 'echarts-for-react';
 
 import '../stylesheets/index.css'
 export default class Alarm extends React.PureComponent {
@@ -12,7 +16,10 @@ export default class Alarm extends React.PureComponent {
         this.state = {
             dataList: [],
             isCheckAll: false,
-
+            activePage: 1,
+            pages: '',
+            // hasRatio:'',
+            // ratioList:[],
             modalId: '',
             modalShow: false,
             modalTitle: '',
@@ -24,47 +31,60 @@ export default class Alarm extends React.PureComponent {
 
     componentDidMount() {
 
-        fetch('http://localhost:4000/dataMonitoringAndAlarm/alarmList', {
+        fetch('http://bigdata-view.cootekservice.com:50056/dataMonitoringAndAlarm/alarmList', {
             method: "POST",
             mode: "cors",
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                id:"id1"
+                activePage: 1
             })
         })
             .then(res => res.json())
-            .then(json => console.log(json));
+            .then(json => {
+                let temp = [];
+                json.alermList.map((item, index) => {
+                    temp.push(item);
+                    temp[index].checked = false;
+                    temp[index].hasRatio = true;
+                    temp[index].ratioList = [];
+                })
+
+                this.setState({
+                    dataList: temp,
+                    pages: json.pages,
+                })
+            });
 
 
 
-        const dataList = [
-            {
-                id: 'id0',
-                hasRatio: true,
-                checked: false,
-                type: 'type1',
-                server: 'server1',
-                description: 'description1',
-                time: 'time1',
-                details: 'details1'
-            },
-            {
-                id: 'id1',
-                hasRatio: false,
-                checked: false,
-                type: 'type2',
-                server: 'server2',
-                description: 'description2',
-                time: 'time2',
-                details: 'details2'
-            }
-        ]
+        // const dataList = [
+        //     {
+        //         id: 'id0',
+        //         hasRatio: true,
+        //         checked: false,
+        //         type: 'type1',
+        //         server: 'server1',
+        //         description: 'description1',
+        //         time: 'time1',
+        //         details: 'details1'
+        //     },
+        //     {
+        //         id: 'id1',
+        //         hasRatio: false,
+        //         checked: false,
+        //         type: 'type2',
+        //         server: 'server2',
+        //         description: 'description2',
+        //         time: 'time2',
+        //         details: 'details2'
+        //     }
+        // ]
 
-        this.setState({
-            dataList: dataList,
-        })
+        // this.setState({
+        //     dataList: dataList,
+        // })
     }
 
     checkCheckbox = (id, index) => {
@@ -184,14 +204,146 @@ export default class Alarm extends React.PureComponent {
         })
     }
     showModalRatio = (data) => {
+        const type = data.type;
+        fetch('http://bigdata-view.cootekservice.com:50056/dataMonitoringAndAlarm/ratio', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                type: type,
+                table: 'base_count'
+            })
+        })
+            .then(res => res.json())
+            .then(json => {
+                data.ratioList = json.ratioList;
+            });
+        console.log(data.ratioList);
+        const option = {
+            title: {
+                text: data.type
+            },
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: { show: true, readOnly: false },
+                    magicType: { show: true, type: ['line', 'bar'] },
+                    restore: { show: true },
+                    saveAsImage: { show: true }
+                }
+            },
+            legend: {
+                data: ['count', '同比', '环比']
+            },
+            xAxis: {
+                data: ["1", "2", "3", "4", "5", "6"]
+            },
+            yAxis: [
+                {
+                    type: 'value',
+                    name: 'count',
+                   
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                },
+                {
+                    type: 'value',
+                    name: 'ratio',
+                   
+                    axisLabel: {
+                        formatter: '{value} %'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: 'count',
+                    type: 'bar',
+                    data: [5, 20, 36, 10, 10, 20]
+                },
+                {
+                    name:'同比',
+                    type:'line',
+                    yAxisIndex:1,
+                    data:[10,-10,20,50,-50,200]
+                },
+                {
+                    name:'环比',
+                    type:'line',
+                    yAxisIndex:1,
+                    data:[-10,10,-20,-50,-30,200]
+                }
+            ]
+        };
+        const modalBody = (
+            <div>
+                {/* <FormGroup controlId="formControlsSelect">
+                    <ControlLabel>Table</ControlLabel>
+                    <FormControl componentClass="select">
+                        <option value="select">base_count</option>
+                        <option value="other">cor_activate_count</option>
+                    </FormControl>
+                </FormGroup> */}
+                <div>
+                    <ReactEcharts
+                        option={option}
+                        notMerge={true}
+                        lazyUpdate={true}
+                        theme={"theme_name"}
+                    />
+                </div>
+
+            </div>
+        );
         this.setState({
             modalId: data,
             modalShow: true,
             modalTitle: <div><span className='strong'>MoM</span> and <span className='strong'>YoY</span> of the alarm</div>,
-            modalBody: "modalBody",
+            modalBody: modalBody,
             modalDo: 'Ok',
             modalControl: 'ratio'
         })
+    }
+    handleSelect = (eventKey) => {
+        this.setState({
+            activePage: eventKey
+        });
+        fetch('http://bigdata-view.cootekservice.com:50056/dataMonitoringAndAlarm/alarmList', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                activePage: eventKey
+            })
+        })
+            .then(res => res.json())
+            .then(json => {
+                let temp = [];
+                json.alermList.map((item, index) => {
+                    temp.push(item);
+                    temp[index].checked = false;
+                    temp[index].hasRatio = true;
+                    temp[index].ratioList = [];
+                })
+
+                this.setState({
+                    dataList: temp,
+                    pages: json.pages,
+                })
+            });
     }
     ack = (id) => {
         //     fetch('http://localhost:4000/ack', {
@@ -211,7 +363,24 @@ export default class Alarm extends React.PureComponent {
         // }
     }
     ratio = (id) => {
-        console.log("ratio:" + id);
+        // const type = id.type;
+        // fetch('http://bigdata-view.cootekservice.com:50056/dataMonitoringAndAlarm/ratio', {
+        //     method: "POST",
+        //     mode: "cors",
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         type: type,
+        //         table: 'base_count'
+        //     })
+        // })
+        //     .then(res => res.json())
+        //     .then(json => {
+        //         this.setState({
+        //             ratioList: json.ratioList
+        //         })
+        //     });
     }
 
     render() {
@@ -238,6 +407,12 @@ export default class Alarm extends React.PureComponent {
                         ackAll={this.showModalAckAll}
                         ratio={this.showModalRatio}
                     />
+                    <PaginationAdvanced
+                        items={this.state.pages}
+                        maxButtons={5}
+                        activePage={this.state.activePage}
+                        onSelect={this.handleSelect}
+                    />
                 </Col>
                 <ModalPop
                     modalId={this.state.modalId}
@@ -247,7 +422,7 @@ export default class Alarm extends React.PureComponent {
                     modalDo={this.state.modalDo}
 
                     closeModal={this.closeModal}
-                    handleDo={this.state.modalControl == 'ack' ? this.ack : this.ratio}
+                    handleDo={this.state.modalControl === 'ack' ? this.ack : this.ratio}
                 />
             </div>
         )

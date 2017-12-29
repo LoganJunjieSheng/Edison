@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import  LoadingButton from '../components/loadingButton'
 

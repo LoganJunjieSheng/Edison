@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import { ListGroup, ListGroupItem, Panel } from 'react-bootstrap';
 
 import '../../stylesheets/index.css'
