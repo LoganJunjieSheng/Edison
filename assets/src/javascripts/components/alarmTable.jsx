@@ -46,8 +46,8 @@ export default class AlarmTable extends React.PureComponent {
                     <td>{data.type}</td>
                     <td>{data.server}</td>
                     <td>{data.description}</td>
-                    <td>{data.time}</td>
-                    {/* <td>{data.details}</td> */}
+                    <td>{data.time.substring(0, 19)}</td>
+                    <td>{data.status}</td>
                     <td>
                         <Button bsSize="xsmall" className='btn-mb10'
                             onClick={() => this.handleAck(data, index)}>ack</Button>
@@ -69,7 +69,7 @@ export default class AlarmTable extends React.PureComponent {
                         <th>Server</th>
                         <th>Description</th>
                         <th>Time</th>
-                        {/* <th>Details</th> */}
+                        <th>Status</th>
                         <th> <Button bsSize="xsmall"
                             onClick={this.handleAckAll}>ACK ALL</Button></th>
                     </tr>
