@@ -7,7 +7,7 @@ module.exports.getAlarmList = function (req, res, next) {
          password: 'TCDAvDol9gAczLav',
          database: 'monitor'
     });
-    let sql='select * from alert order by status asc;';
+    let sql='select * from alert order by status desc;';
     let activePage=req.param('activePage');
     let alermList=[];
     let pages=0;
