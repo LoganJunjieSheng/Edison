@@ -20,10 +20,10 @@ export default class AlarmTable extends React.PureComponent {
     handleAck = (data, index) => {
         this.props.ack(data, index);
     }
-    handleAckAll=()=>{
+    handleAckAll = () => {
         this.props.ackAll();
     }
-    handleRatio=(data)=>{
+    handleRatio = (data) => {
         this.props.ratio(data);
     }
     render() {
@@ -31,17 +31,17 @@ export default class AlarmTable extends React.PureComponent {
         let datas = [];
         dataList.map((data, index) => {
             let checked = data.checked ? 'checked' : "";
-            let radio = data.hasRatio ? <Button bsSize="xsmall" onClick={()=>this.handleRatio(data)} >ratio</Button> : '';
+            let radio = data.hasRatio ? <Button bsSize="xsmall" onClick={() => this.handleRatio(data)} >ratio</Button> : '';
             datas.push(
                 <tr key={index} className={checked}>
                     <td>
-                        <Checkbox
+                        {/* <Checkbox
                             inline
                             checked={data.checked}
                             onClick={() => this.handleCheck(data.id, index)}
-                        >
+                        > */}
                             {index + 1}
-                        </Checkbox>
+                        {/* </Checkbox> */}
                     </td>
                     <td>{data.type}</td>
                     <td>{data.server}</td>
@@ -60,18 +60,25 @@ export default class AlarmTable extends React.PureComponent {
             <Table responsive>
                 <thead>
                     <tr>
-                        <th><Checkbox
+                        <th>
+                            {/* <Checkbox
                             inline
                             checked={this.state.checkAll}
                             onClick={this.handleCheckAll}
-                        > #</Checkbox></th>
+                        > */}
+                         #
+                         {/* </Checkbox> */}
+                         </th>
                         <th>Type</th>
                         <th>Server</th>
                         <th>Description</th>
                         <th>Time</th>
                         <th>Status</th>
-                        <th> <Button bsSize="xsmall"
-                            onClick={this.handleAckAll}>ACK ALL</Button></th>
+                        <th> 
+                            {/* <Button bsSize="xsmall"
+                            onClick={this.handleAckAll}>ACK ALL</Button> */}
+                            Action  
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
