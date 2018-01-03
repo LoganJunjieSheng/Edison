@@ -91,8 +91,8 @@ export default class Operation extends React.PureComponent {
                 option: option
             })
         })
-            .then(res => res.json())
-            .then(json => console.log(json));
+            // .then(res => res.json())
+            // .then(json => console.log(json));
     }
 
     render() {
@@ -123,7 +123,7 @@ export default class Operation extends React.PureComponent {
 
                     <div className="page-item">
                         <div className='page-title' >Restart Rainbow2.0</div>
-                        <Button bsClass='btn btn-default  btn-mr20' bsSize="large" value='restart-rainbow-china'
+                        <Button bsClass='btn btn-default  btn-mr20' bsSize="large" value='restart-rainbow-restart'
                             onClick={(e) => this.showModalRainbow(e)}>RESTART</Button>
                     </div>
 
