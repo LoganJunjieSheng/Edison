@@ -63,7 +63,9 @@ export default class AlarmTable extends React.PureComponent {
                         <th>
                             {/* <Checkbox
                             inline
-                            checked={this.state.checkAll}
+                            
+                            
+                            ={this.state.checkAll}
                             onClick={this.handleCheckAll}
                         > */}
                          #

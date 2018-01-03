@@ -53,8 +53,12 @@ export default class Alarm extends React.PureComponent {
                 let temp = [];
                 json.alermList.map((item, index) => {
                     temp.push(item);
-                    temp[index].checked = false;
-                    // temp[index].hasRatio = true;
+                    if (temp[index].status) {
+                        temp[index].checked = true;
+                    } else {
+                        temp[index].checked = false;
+                    }
+
                     temp[index].ratioList = [];
                 })
 
@@ -206,16 +210,19 @@ export default class Alarm extends React.PureComponent {
                                 type: 'line',
                                 data: current,
                                 yAxisIndex: 1,
+                                smooth :true,
                             },
                             {
                                 name: 'day of day',
                                 type: 'line',
                                 data: dod,
+                                smooth :true,
                             },
                             {
                                 name: 'month of month',
                                 type: 'line',
                                 data: mom,
+                                smooth :true,
                             },
                         ];
                         break;
@@ -241,16 +248,19 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_check,
                                     yAxisIndex: 1,
+                                    smooth :true,
                                 },
                                 {
                                     name: 'day of day',
                                     type: 'line',
                                     data: dod_check,
+                                    smooth :true,
                                 },
                                 {
                                     name: 'month of month',
                                     type: 'line',
                                     data: mom_check,
+                                    smooth :true,
                                 },
                             ];
                         });
@@ -295,34 +305,40 @@ export default class Alarm extends React.PureComponent {
                                 type: 'line',
                                 data: current_shown,
                                 yAxisIndex: 1,
+                                smooth :true,
                             },
                             {
                                 name: 'day of day(shown)',
                                 type: 'line',
                                 // yAxisIndex: 1,
                                 data: dod_shown,
+                                smooth :true,
                             },
                             {
                                 name: 'month of month(shown)',
                                 type: 'line',
                                 // yAxisIndex: 1,
                                 data: mom_shown,
+                                smooth :true,
                             },
                             {
                                 name: 'count(click)',
                                 type: 'line',
                                 data: current_click,
                                 yAxisIndex: 1,
+                                smooth :true,
                             },
                             {
                                 name: 'day of day(click)',
                                 type: 'line',
                                 data: dod_click,
+                                smooth :true,
                             },
                             {
                                 name: 'month of month(click)',
                                 type: 'line',
                                 data: mom_click,
+                                smooth :true,
                             },
                         ];
                         break;
@@ -334,11 +350,20 @@ export default class Alarm extends React.PureComponent {
                         let current_hangup_revenus = [];
                         let current_other_revenus = [];
                         let current_red_revenus = [];
-                        
+
                         let dod_active = [];
                         let dod_active_launch = [];
+                        let dod_feeds_revenus = [];
+                        let dod_hangup_revenus = [];
+                        let dod_other_revenus = [];
+                        let dod_red_revenus = [];
+
                         let mom_active = [];
                         let mom_active_launch = [];
+                        let mom_feeds_revenus = [];
+                        let mom_hangup_revenus = [];
+                        let mom_other_revenus = [];
+                        let mom_red_revenus = [];
                         legend = {
                             data: [
                                 'count(active)', 'day of day(active)', 'month of month(active)',
@@ -349,10 +374,255 @@ export default class Alarm extends React.PureComponent {
                                 'count(red_revenus)', 'day of day(red_revenus)', 'month of month(red_revenus)',
                             ],
                             selected: {
-                                
+                                // 'count(active)':false,
+                                'count(active_launch)': false,
+                                'day of day(active_launch)': false,
+                                'month of month(active_launch)': false,
+                                'count(feeds_revenus)': false,
+                                'day of day(feeds_revenus)': false,
+                                'month of month(feeds_revenus)': false,
+                                'count(hangup_revenus)': false,
+                                'day of day(hangup_revenus)': false,
+                                'month of month(hangup_revenus)': false,
+                                'count(other_revenus)': false,
+                                'day of day(other_revenus)': false,
+                                'month of month(other_revenus)': false,
+                                'count(red_revenus)': false,
+                                'day of day(red_revenus)': false,
+                                'month of month(red_revenus)': false,
+
+                            },
+                            type: 'scroll',
+                            right: '15%',
+                            left: '20%',
+                        };
+                        data.ratioList.map((item, index) => {
+                            console.log(item)
+                            current_active.push(item.active_current);
+                            current_active_launch.push(item.launch_active_current);
+                            current_feeds_revenus.push(item.feeds_revenue_current);
+                            current_hangup_revenus.push(item.hangup_revenue_current);
+                            current_other_revenus.push(item.other_revenue_current);
+                            current_red_revenus.push(item.red_revenue_current);
+
+                            date.push(item.date.substring(0, 19));
+
+                            dod_active.push((item.active_current - item.active_last_day) / item.active_last_day * 100);
+                            dod_active_launch.push((item.launch_active_current - item.launch_active_last_day) / item.launch_active_last_day * 100);
+                            dod_feeds_revenus.push((item.feeds_revenue_current - item.feeds_revenue_last_day) / item.feeds_revenue_last_day * 100);
+                            dod_hangup_revenus.push((item.hangup_revenue_current - item.hangup_revenue_last_day) / item.hangup_revenue_last_day * 100);
+                            dod_other_revenus.push((item.other_revenue_current - item.other_revenue_last_day) / item.other_revenue_last_day * 100);
+                            dod_red_revenus.push((item.red_revenue_current - item.red_revenue_last_day) / item.red_revenue_last_day * 100);
+
+                            mom_active.push((item.active_current - item.active_last_month) / item.active_last_month * 100);
+                            mom_active_launch.push((item.launch_active_current - item.launch_active_last_month) / item.launch_active_last_month * 100);
+                            mom_feeds_revenus.push((item.feeds_revenue_current - item.feeds_revenue_last_month) / item.feeds_revenue_last_month * 100);
+                            mom_hangup_revenus.push((item.hangup_revenue_current - item.hangup_revenue_last_month) / item.hangup_revenue_last_month * 100);
+                            mom_other_revenus.push((item.other_revenue_current - item.other_revenue_last_month) / item.other_revenue_last_month * 100);
+                            mom_red_revenus.push((item.red_revenue_current - item.red_revenue_last_month) / item.red_revenue_last_month * 100);
+                        });
+                        series =
+                            [
+                                {
+                                    name: 'count(active)',
+                                    type: 'line',
+                                    data: current_active,
+                                    yAxisIndex: 1,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'day of day(active)',
+                                    type: 'line',
+                                    // yAxisIndex: 1,
+                                    data: dod_active,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'month of month(active)',
+                                    type: 'line',
+                                    // yAxisIndex: 1,
+                                    data: mom_active,
+                                    smooth :true,
+                                },
+
+                                {
+                                    name: 'count(active_launch)',
+                                    type: 'line',
+                                    data: current_active_launch,
+                                    yAxisIndex: 1,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'day of day(active_launch)',
+                                    type: 'line',
+                                    data: dod_active_launch,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'month of month(active_launch)',
+                                    type: 'line',
+                                    data: mom_active_launch,
+                                    smooth :true,
+                                },
+
+                                {
+                                    name: 'count(feeds_revenus)',
+                                    type: 'line',
+                                    data: current_feeds_revenus,
+                                    yAxisIndex: 1,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'day of day(feeds_revenus)',
+                                    type: 'line',
+                                    data: dod_feeds_revenus,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'month of month(feeds_revenus)',
+                                    type: 'line',
+                                    data: mom_feeds_revenus,
+                                    smooth :true,
+                                },
+
+                                {
+                                    name: 'count(hangup_revenus)',
+                                    type: 'line',
+                                    data: current_hangup_revenus,
+                                    yAxisIndex: 1,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'day of day(hangup_revenus)',
+                                    type: 'line',
+                                    data: dod_hangup_revenus,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'month of month(hangup_revenus)',
+                                    type: 'line',
+                                    data: mom_hangup_revenus,
+                                    smooth :true,
+                                },
+
+                                {
+                                    name: 'count(other_revenus)',
+                                    type: 'line',
+                                    data: current_other_revenus,
+                                    yAxisIndex: 1,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'day of day(other_revenus)',
+                                    type: 'line',
+                                    data: dod_other_revenus,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'month of month(other_revenus)',
+                                    type: 'line',
+                                    data: mom_other_revenus,
+                                    smooth :true,
+                                },
+
+                                {
+                                    name: 'count(red_revenus)',
+                                    type: 'line',
+                                    data: current_red_revenus,
+                                    yAxisIndex: 1,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'day of day(red_revenus)',
+                                    type: 'line',
+                                    data: dod_red_revenus,
+                                    smooth :true,
+                                },
+                                {
+                                    name: 'month of month(red_revenus)',
+                                    type: 'line',
+                                    data: mom_red_revenus,
+                                    smooth :true,
+                                },
+                            ];
+                        break;
+                    case 'retention_count':
+                        legend = {
+                            data: ['activate',
+                                'retention rate(2 days)',
+                                'retention rate(3 days)',
+                                'retention rate(7 days)',
+                                'retention rate(14 days)',
+                                'retention rate(30 days)',
+                                'retention rate(60 days)'],
+                            selected: {
+                                'activate': false,
                             }
                         };
-                        break;
+                        let activate = [];
+                        let day2 = [];
+                        let day3 = [];
+                        let day7 = [];
+                        let day14 = [];
+                        let day30 = [];
+                        let day60 = [];
+                        data.ratioList.map((item, index) => {
+                            activate.push(item.activate);
+                            date.push(item.date.substring(0, 19));
+                            day2.push(item.retention_2 / item.activate * 100);
+                            day3.push(item.retention_3 / item.activate * 100);
+                            day7.push(item.retention_7 / item.activate * 100);
+                            day14.push(item.retention_14 / item.activate * 100);
+                            day30.push(item.retention_30 / item.activate * 100);
+                            day60.push(item.retention_60 / item.activate * 100);
+                            console.log(item)
+                        });
+
+                        series = [
+                            {
+                                name: 'activate',
+                                type: 'line',
+                                data: activate,
+                                yAxisIndex: 1,
+                                smooth :true,
+                            },
+                            {
+                                name: 'retention rate(2 days)',
+                                type: 'line',
+                                data: day2,
+                                smooth :true,
+                            },
+                            {
+                                name: 'retention rate(3 days)',
+                                type: 'line',
+                                data: day3,
+                                smooth :true,
+                            },
+                            {
+                                name: 'retention rate(7 days)',
+                                type: 'line',
+                                data: day7,
+                                smooth :true,
+                            },
+                            {
+                                name: 'retention rate(14 days)',
+                                type: 'line',
+                                data: day14,
+                                smooth :true,
+                            },
+                            {
+                                name: 'retention rate(30 days)',
+                                type: 'line',
+                                data: day30,
+                                smooth :true,
+                            },
+                            {
+                                name: 'retention rate(60 days)',
+                                type: 'line',
+                                data: day60,
+                                smooth :true,
+                            },
+                        ];
                     default:
 
                 }
@@ -536,7 +806,7 @@ export default class Alarm extends React.PureComponent {
 
                 <Col xsHidden smHidden md={12}><div className="placeholder-h30"></div></Col>
                 <Col xsHidden smHidden md={1}></Col>
-                <Col xs={12} md={10}>
+                <Col xs={12} md={10} >
                     <div>
                         <ReactEcharts
                             option={this.state.echartsOption}
@@ -547,6 +817,7 @@ export default class Alarm extends React.PureComponent {
                     </div>
                 </Col>
                 <Col xsHidden smHidden md={1}></Col>
+                <Col xsHidden smHidden md={12}><div className="placeholder-h30"></div></Col>
                 <ModalPop
                     modalId={this.state.ackActive}
                     modalShow={this.state.modalShow}
