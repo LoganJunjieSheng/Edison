@@ -1,4 +1,4 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
 import {Jumbotron, Button} from 'react-bootstrap';
 import '../stylesheets/index.css'
 
