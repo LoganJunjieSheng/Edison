@@ -36,10 +36,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, 'assets/public')));
+app.use(express.static(path.join(__dirname, 'assets/build')));
+app.listen('192.168.1.48');//限制为内网访问
 
-
-app.use(allowCrossDomain);
+//app.use(allowCrossDomain);
 
 app.use('/', index);
 // app.use('/users', users);
