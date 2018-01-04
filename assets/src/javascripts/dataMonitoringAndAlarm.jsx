@@ -713,8 +713,12 @@ export default class Alarm extends React.PureComponent {
                 let temp = [];
                 json.alermList.map((item, index) => {
                     temp.push(item);
-                    temp[index].checked = false;
-                    // temp[index].hasRatio = true;
+                    if (temp[index].status) {
+                        temp[index].checked = true;
+                    } else {
+                        temp[index].checked = false;
+                    }
+
                     temp[index].ratioList = [];
                 })
 
