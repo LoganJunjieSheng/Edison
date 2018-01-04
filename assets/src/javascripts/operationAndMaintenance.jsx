@@ -78,11 +78,10 @@ export default class Operation extends React.PureComponent {
         let option = idArray[2];
         console.log("operation : " + operation + ' / server : ' + server + ' / option : ' + option)
 
-        fetch('http://localhost:4000/operationAndMaintenanceTools/drill/restart', {
+        fetch('http://bigdata-view.cootekservice.com:50056/operationAndMaintenanceTools/restartAndSwitch', {
             method: "POST",
             mode: "cors",
             headers: {
-                // 'Content-Type': 'application/x-www-form-urlencoded'
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
