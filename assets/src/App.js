@@ -4,7 +4,7 @@ import {
     BrowserRouter as Router,
     Route,
     Link,
-    NavLink
+    NavLink,
 } from 'react-router-dom'
 // import Navigation from './javascripts/components/nav';
 import Index from './javascripts/index';

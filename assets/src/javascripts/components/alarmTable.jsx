@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Table } from 'react-bootstrap';
+import { Button, Checkbox, Table,ButtonToolbar } from 'react-bootstrap';
 
 import '../../stylesheets/index.css'
 
@@ -31,27 +31,29 @@ export default class AlarmTable extends React.PureComponent {
         let datas = [];
         dataList.map((data, index) => {
             let checked = data.checked ? 'checked' : "";
-            let radio = data.hasRatio ? <Button bsSize="xsmall" onClick={() => this.handleRatio(data)} >ratio</Button> : '';
+            let radio = data.hasRatio ? <Button bsSize="xsmall" bsStyle="primary" onClick={() => this.handleRatio(data)} >ratio</Button> : '';
             datas.push(
-                <tr key={index} className={checked}>
-                    <td>
+                <tr key={data.type} className={checked}>
+                    {/* <td> */}
                         {/* <Checkbox
                             inline
                             checked={data.checked}
                             onClick={() => this.handleCheck(data.id, index)}
                         > */}
-                            {index + 1}
+                        {/* {index + 1} */}
                         {/* </Checkbox> */}
-                    </td>
+                    {/* </td> */}
                     <td>{data.type}</td>
                     <td>{data.server}</td>
                     <td>{data.description}</td>
                     <td>{data.time.substring(0, 19)}</td>
                     <td>{data.status}</td>
                     <td>
-                        <Button bsSize="xsmall" className='btn-mb10'
-                            onClick={() => this.handleAck(data, index)}>ack</Button>
-                        {radio}
+                        <ButtonToolbar>
+                            <Button bsSize="xsmall" bsStyle="primary" className='btn-mb10'
+                                onClick={() => this.handleAck(data, index)}>ack</Button>
+                            {radio}
+                        </ButtonToolbar>
                     </td>
                 </tr>
             )
@@ -60,7 +62,7 @@ export default class AlarmTable extends React.PureComponent {
             <Table responsive>
                 <thead>
                     <tr>
-                        <th>
+                        {/* <th> */}
                             {/* <Checkbox
                             inline
                             
@@ -68,18 +70,18 @@ export default class AlarmTable extends React.PureComponent {
                             ={this.state.checkAll}
                             onClick={this.handleCheckAll}
                         > */}
-                         #
+                            {/* # */}
                          {/* </Checkbox> */}
-                         </th>
+                        {/* </th> */}
                         <th>Type</th>
                         <th>Server</th>
                         <th>Description</th>
                         <th>Time</th>
                         <th>Status</th>
-                        <th> 
+                        <th>
                             {/* <Button bsSize="xsmall"
                             onClick={this.handleAckAll}>ACK ALL</Button> */}
-                            Action  
+                            Action
                         </th>
                     </tr>
                 </thead>

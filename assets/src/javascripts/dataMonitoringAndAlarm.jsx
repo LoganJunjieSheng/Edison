@@ -210,19 +210,19 @@ export default class Alarm extends React.PureComponent {
                                 type: 'line',
                                 data: current,
                                 yAxisIndex: 1,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'day of day',
                                 type: 'line',
                                 data: dod,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'month of month',
                                 type: 'line',
                                 data: mom,
-                                smooth :true,
+                                smooth: true,
                             },
                         ];
                         break;
@@ -248,19 +248,19 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_check,
                                     yAxisIndex: 1,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'day of day',
                                     type: 'line',
                                     data: dod_check,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'month of month',
                                     type: 'line',
                                     data: mom_check,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                             ];
                         });
@@ -305,40 +305,40 @@ export default class Alarm extends React.PureComponent {
                                 type: 'line',
                                 data: current_shown,
                                 yAxisIndex: 1,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'day of day(shown)',
                                 type: 'line',
                                 // yAxisIndex: 1,
                                 data: dod_shown,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'month of month(shown)',
                                 type: 'line',
                                 // yAxisIndex: 1,
                                 data: mom_shown,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'count(click)',
                                 type: 'line',
                                 data: current_click,
                                 yAxisIndex: 1,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'day of day(click)',
                                 type: 'line',
                                 data: dod_click,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'month of month(click)',
                                 type: 'line',
                                 data: mom_click,
-                                smooth :true,
+                                smooth: true,
                             },
                         ];
                         break;
@@ -428,21 +428,21 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_active,
                                     yAxisIndex: 1,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'day of day(active)',
                                     type: 'line',
                                     // yAxisIndex: 1,
                                     data: dod_active,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'month of month(active)',
                                     type: 'line',
                                     // yAxisIndex: 1,
                                     data: mom_active,
-                                    smooth :true,
+                                    smooth: true,
                                 },
 
                                 {
@@ -450,19 +450,19 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_active_launch,
                                     yAxisIndex: 1,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'day of day(active_launch)',
                                     type: 'line',
                                     data: dod_active_launch,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'month of month(active_launch)',
                                     type: 'line',
                                     data: mom_active_launch,
-                                    smooth :true,
+                                    smooth: true,
                                 },
 
                                 {
@@ -470,19 +470,19 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_feeds_revenus,
                                     yAxisIndex: 1,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'day of day(feeds_revenus)',
                                     type: 'line',
                                     data: dod_feeds_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'month of month(feeds_revenus)',
                                     type: 'line',
                                     data: mom_feeds_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
 
                                 {
@@ -490,19 +490,19 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_hangup_revenus,
                                     yAxisIndex: 1,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'day of day(hangup_revenus)',
                                     type: 'line',
                                     data: dod_hangup_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'month of month(hangup_revenus)',
                                     type: 'line',
                                     data: mom_hangup_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
 
                                 {
@@ -510,19 +510,19 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_other_revenus,
                                     yAxisIndex: 1,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'day of day(other_revenus)',
                                     type: 'line',
                                     data: dod_other_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'month of month(other_revenus)',
                                     type: 'line',
                                     data: mom_other_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
 
                                 {
@@ -530,19 +530,19 @@ export default class Alarm extends React.PureComponent {
                                     type: 'line',
                                     data: current_red_revenus,
                                     yAxisIndex: 1,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'day of day(red_revenus)',
                                     type: 'line',
                                     data: dod_red_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                                 {
                                     name: 'month of month(red_revenus)',
                                     type: 'line',
                                     data: mom_red_revenus,
-                                    smooth :true,
+                                    smooth: true,
                                 },
                             ];
                         break;
@@ -584,43 +584,43 @@ export default class Alarm extends React.PureComponent {
                                 type: 'line',
                                 data: activate,
                                 yAxisIndex: 1,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'retention rate(2 days)',
                                 type: 'line',
                                 data: day2,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'retention rate(3 days)',
                                 type: 'line',
                                 data: day3,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'retention rate(7 days)',
                                 type: 'line',
                                 data: day7,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'retention rate(14 days)',
                                 type: 'line',
                                 data: day14,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'retention rate(30 days)',
                                 type: 'line',
                                 data: day30,
-                                smooth :true,
+                                smooth: true,
                             },
                             {
                                 name: 'retention rate(60 days)',
                                 type: 'line',
                                 data: day60,
-                                smooth :true,
+                                smooth: true,
                             },
                         ];
                     default:
