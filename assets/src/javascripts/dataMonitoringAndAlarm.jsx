@@ -676,14 +676,14 @@ export default class Alarm extends React.PureComponent {
                     dataZoom: [
                         {
                             type: 'inside',
-                            start: 0,
-                            end: 100
+                            start: 90,
+                            end: 100,
                         },
                         {
                             type: 'slider',
                             xAxisIndex: 0,
                             start: 0,
-                            end: 100
+                            end: 100,
                         },
                     ],
                     series: series

@@ -10,14 +10,26 @@ export default class CommonTable extends React.PureComponent {
 
         }
     }
+
     render() {
         const renderThead = this.props.thead.map((item, index) =>
             <th key={index}>{item}</th>
         )
         const renderTbody = this.props.data.map((item, index) => {
-            return (item.jsx)
+            if (item.type === 'group') {
+                return (<GroupRow
+                    key={item.group}
+                    type={item.type}
+                    group={item.group}
+                    description={item.description}
+                    users={item.users}
+
+                    Edit={this.props.modalEditGroup}
+                    Delete={this.props.deleteRow}
+                />)
+            }
         })
-        
+
         return (
             <div>
                 <Table responsive>

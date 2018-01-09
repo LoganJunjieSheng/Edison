@@ -10,16 +10,19 @@ export default class UserAndGroup extends React.PureComponent {
 
         }
     }
+   
     render() {
         const userOrGroup = this.props.userOrGroup;
         const data = this.props.data;
         const thead = userOrGroup === 'group' ? ['Group', 'Description', 'Users', 'Action'] : ['User', 'Description', 'Groups', 'Action'];
         const renderCommonTable = () => {
-            if (this.state.userOrGroup === 'group') {
+            if (this.props.userOrGroup === 'group') {
                 return (
                     <CommonTable
                         thead={thead}
                         data={this.props.data}
+                        modalEditGroup={this.props.modalEditGroup}
+                        deleteRow={this.props.deleteRow}
                     />
                 );
             } else {
@@ -27,6 +30,7 @@ export default class UserAndGroup extends React.PureComponent {
                     <CommonTable
                         thead={thead}
                         data={this.props.data}
+                       
                     />
                 );
             }
@@ -37,7 +41,7 @@ export default class UserAndGroup extends React.PureComponent {
             <div>
                 <div className='page-title'>
                     <span className="btn-mr20">{this.props.userOrGroup === 'user' ? 'User' : 'Group'}</span>
-                    <Button bsStyle="primary"><Glyphicon glyph="plus" />Add</Button>
+                    <Button bsStyle="primary" onClick={this.props.userOrGroup === 'user' ? this.props.userAddUser : this.props.modalAddGroup} ><Glyphicon glyph="plus" />Add</Button>
                 </div>
                 {renderCommonTable()}
             </div>
