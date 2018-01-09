@@ -1,6 +1,5 @@
 var express = require('express');
 var path = require('path');
-var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -16,7 +15,7 @@ var dataMonitoringAndAlarm=require('./routes/dataMonitoringAndAlarm');
 
 
 var allowCrossDomain = function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
     res.header('Access-Control-Allow-Headers', 'Content-Type');
     res.header('Access-Control-Allow-Credentials','true');
@@ -37,6 +36,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'assets/build')));
+//app.listen('192.168.1.48');
 
 app.use(allowCrossDomain);
 

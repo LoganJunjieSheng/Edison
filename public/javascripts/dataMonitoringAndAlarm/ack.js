@@ -1,27 +1,26 @@
-module.exports.restart = function (req, res, next) {
-    let operation = req.param('operation');
-    let server = req.param('server');
-    let option = req.param('option');
-
+module.exports.handleKafka = function (req, res, next) {
+    let type = req.param('type');
+    let status = req.param('status');
+    let description = req.param('description');
+    
     let kafka = require('kafka-node');
     let Producer = kafka.Producer;
     let KeyedMessage = kafka.KeyedMessage;
-    let client = new kafka.Client('localhost:2181');
+    let client = new kafka.Client('localhost:2181');//zookeeper address
     let producer = new Producer(client);
     let km = new KeyedMessage("key", "message");
 
     let myDate = new Date()
 
     let tempMessage={
-        operation:operation,
-        server:server, 
-        option:option,
+        type:type,
+        status:status,
+        description:description,
         time:myDate.toLocaleString()
     }
     let jsonMessage=JSON.stringify(tempMessage);
     let payloads = [{
-        topic: 'test',
-        // messages: [operation, server, option, myDate.toLocaleString()]
+        topic: 'alarmAck',
         messages: [jsonMessage],
     }];
 
@@ -38,3 +37,4 @@ module.exports.restart = function (req, res, next) {
         'res': ' drill restart'
     });
 };
+
