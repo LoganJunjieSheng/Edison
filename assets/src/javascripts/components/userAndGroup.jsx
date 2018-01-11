@@ -7,20 +7,7 @@ export default class UserAndGroup extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            // data: [
-            //     {
-            //         group: 'group1',
-            //         description: 'description1',
-            //         userNumber: 3,
-            //         userList: ['user1', 'user2', 'user3', 'user4'].toString(),
-            //     },
-            //     {
-            //         group: 'group2',
-            //         description: 'description1',
-            //         userNumber: 3,
-            //         userList: ['user1', 'user2', 'user3'].toString(),
-            //     },
-            // ]
+
         }
     }
     renderEditable = (cellInfo) => {
@@ -40,11 +27,19 @@ export default class UserAndGroup extends React.PureComponent {
             />
         );
     }
-    renderAction = (cellInfo) => {
+    renderGroupAction = (cellInfo) => {
         return (
             <ButtonToolbar>
                 <Button bsSize="xsmall" bsStyle="primary" onClick={e => { this.props.modalEditGroup(cellInfo) }}><Glyphicon glyph="pencil" /></Button>
                 <Button bsSize="xsmall" bsStyle="danger" onClick={e => { this.props.modalDeleteGroup(cellInfo) }}><Glyphicon glyph="trash" /></Button>
+            </ButtonToolbar>
+        )
+    }
+    renderUserAction = (cellInfo) => {
+        return (
+            <ButtonToolbar>
+                <Button bsSize="xsmall" bsStyle="primary" onClick={e => { this.props.modalEditUser(cellInfo) }}><Glyphicon glyph="pencil" /></Button>
+                <Button bsSize="xsmall" bsStyle="danger" onClick={e => { this.props.modalDeleteUser(cellInfo) }}><Glyphicon glyph="trash" /></Button>
             </ButtonToolbar>
         )
     }
@@ -67,13 +62,13 @@ export default class UserAndGroup extends React.PureComponent {
                                     {
                                         Header: "Group Name",
                                         accessor: "group",
-                                        filterable:true,
+                                        filterable: true,
                                     },
                                     {
                                         Header: "Group description",
                                         accessor: "description",
                                         Cell: this.renderEditable,
-                                        filterable:true,
+                                        filterable: true,
                                     }
                                 ]
                             },
@@ -83,12 +78,12 @@ export default class UserAndGroup extends React.PureComponent {
                                     {
                                         Header: "User number",
                                         accessor: "userNumber",
-                                        filterable:true,
+                                        filterable: true,
                                     },
                                     {
                                         Header: "Users",
                                         accessor: "userList",
-                                        filterable:true,
+                                        filterable: true,
                                     }
                                 ]
                             },
@@ -97,8 +92,8 @@ export default class UserAndGroup extends React.PureComponent {
                                 columns: [
                                     {
                                         Header: "Action",
-                                        Cell: this.renderAction,
-                                        
+                                        Cell: this.renderGroupAction,
+
                                     },
                                 ]
                             },
@@ -106,18 +101,60 @@ export default class UserAndGroup extends React.PureComponent {
                         ]}
                         defaultPageSize={10}
                         className="-striped -highlight"
-                        
+
                     />
                 );
             } else {
-                // return (
-                //     <CommonTable
-                //         thead={thead}
-                //         data={this.props.data}
-                //         modalEditGroup={this.props.modalEditGroup}
-                //         deleteRow={this.props.deleteRow}
-                //     />
-                // );
+                const data = this.props.data.map((item) => {
+                    let temp = Object.assign({}, item);
+                    temp.groupList = item.groupList.toString();
+                    return temp;
+                });
+                return (
+                    <ReactTable
+                        data={data}
+                        columns={[
+                            {
+                                Header: "User",
+                                columns: [
+                                    {
+                                        Header: "User Name",
+                                        accessor: "user",
+                                        filterable: true,
+                                    },
+                                ]
+                            },
+                            {
+                                Header: "Group",
+                                columns: [
+                                    {
+                                        Header: "Group number",
+                                        accessor: "groupNumber",
+                                        filterable: true,
+                                    },
+                                    {
+                                        Header: "Group",
+                                        accessor: "groupList",
+                                        filterable: true,
+                                    }
+                                ]
+                            },
+                            {
+                                Header: "Action",
+                                columns: [
+                                    {
+                                        Header: "Action",
+                                        Cell: this.renderUserAction,
+
+                                    },
+                                ]
+                            },
+
+                        ]}
+                        defaultPageSize={10}
+                        className="-striped -highlight"
+                    />
+                )
             }
 
         }
@@ -125,8 +162,13 @@ export default class UserAndGroup extends React.PureComponent {
         return (
             <div>
                 <div className='page-title'>
-                    <span className="btn-mr20">{this.props.userOrGroup === 'user' ? 'User' : 'Group'}</span>
-                    <Button bsStyle="primary" onClick={this.props.userOrGroup === 'user' ? this.props.userAddUser : this.props.modalAddGroup} ><Glyphicon glyph="plus" />Add</Button>
+                    <span className="btn-mr20">{this.props.userOrGroup === 'user'
+                        ? 'User'
+                        : 'Group'}</span>
+                    <Button bsStyle="primary" onClick={this.props.userOrGroup === 'user'
+                        ? this.props.modalAddUser
+                        : this.props.modalAddGroup} >
+                        <Glyphicon glyph="plus" />Add</Button>
                 </div>
                 {renderTable()}
             </div>

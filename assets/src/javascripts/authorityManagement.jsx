@@ -16,7 +16,7 @@ export default class Authority extends React.PureComponent {
             userList: [],
             activeList: [],
             optionsUser: [],
-            // optionsGroup: [],
+            optionsGroup: [],
 
             modalDelete: {
                 show: false,
@@ -31,12 +31,26 @@ export default class Authority extends React.PureComponent {
                 data: [],
                 index: null,
             },
+            modalEditUser: {
+                show: false,
+                type: '',
+                value: '',
+                data: [],
+                index: null,
+            },
             modalAddGroup: {
                 buttonControl: true,
                 groupNameControl: 'error',
                 show: false,
                 groupName: '',
                 description: '',
+                data: [],
+            },
+            modalAddUser: {
+                buttonControl: true,
+                groupNameControl: 'error',
+                show: false,
+                userName: '',
                 data: [],
             },
         }
@@ -48,9 +62,7 @@ export default class Authority extends React.PureComponent {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                activePage: 1
-            })
+            body: JSON.stringify({})
         })
             .then(res => res.json())
             .then(json => {
@@ -71,20 +83,14 @@ export default class Authority extends React.PureComponent {
                 })
             })
     }
-   
-    redirectToUser=()=>{
-        this.setState({ userOrGroup: 'user', })
-    }
-    redirectToGroup=()=>{
+    redirectToGroup = () => {
         fetch('http://bigdata-view.cootekservice.com:50056/authority/group/getData', {
             method: "POST",
             mode: "cors",
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                activePage: 1
-            })
+            body: JSON.stringify({})
         })
             .then(res => res.json())
             .then(json => {
@@ -104,6 +110,34 @@ export default class Authority extends React.PureComponent {
                     // optionsGroup: json.groupName,
                 })
             })
+    }
+    redirectToUser = () => {
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/user/getData', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({})
+        })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let optionsGroup = [];
+                json.groupName.map((item, index) => {
+                    optionsGroup.push({
+                        label: item,
+                        value: item,
+                    })
+                })
+                this.setState({
+                    userOrGroup: 'user',
+                    groupList: json.userList,
+                    activeList: json.userList,
+                    optionsGroup: optionsGroup,
+                })
+            })
+
     }
     renderButtonToolbar = () => {
         if (this.state.userOrGroup === 'group') {
@@ -128,13 +162,19 @@ export default class Authority extends React.PureComponent {
         modalDelete.show = false;
         let modalEditGroup = Object.assign({}, this.state.modalEditGroup);
         modalEditGroup.show = false;
+        let modalEditUser = Object.assign({}, this.state.modalEditUser);
+        modalEditUser.show = false;
         let modalAddGroup = Object.assign({}, this.state.modalAddGroup);
         modalAddGroup.show = false;
+        let modalAddUser = Object.assign({}, this.state.modalAddUser);
+        modalAddUser.show = false;
 
         this.setState({
             modalDelete: modalDelete,
             modalEditGroup: modalEditGroup,
+            modalEditUser: modalEditUser,
             modalAddGroup: modalAddGroup,
+            modalAddUser, modalAddUser
         })
     }
 
@@ -212,7 +252,6 @@ export default class Authority extends React.PureComponent {
 
         modalAddGroup.groupName = e.target.value;
         for (let i = 0; i < activeList.length; i++) {
-            console.log(activeList[i])
             if (activeList[i].group !== e.target.value && e.target.value !== '') {
                 modalAddGroup.groupNameControl = 'success';
                 modalAddGroup.buttonControl = false;
@@ -258,7 +297,109 @@ export default class Authority extends React.PureComponent {
         })
     }
 
+    //user delete user
+    modalDeleteUser = (cellInfo) => {
+        let modalDelete = Object.assign({}, this.state.modalDelete);
+        modalDelete.show = true;
+        modalDelete.type = 'user';
+        modalDelete.value = cellInfo.original.user;
+        modalDelete.index = cellInfo.index;
+        this.setState({
+            modalDelete
+        })
+    }
+    deleteUserOver = () => {
+        let modalDelete = Object.assign({}, this.state.modalDelete);
+        let activeList = this.state.activeList.slice(0);
+        activeList.splice(modalDelete.index, 1);
+        modalDelete.show = false;
+        this.setState({
+            modalDelete: modalDelete,
+            activeList: activeList,
+        })
+    }
+    //group edit user
+    modalEditUser = (cellInfo) => {
+        let modalEditUser = Object.assign({}, this.state.modalEditUser);
+        modalEditUser.show = true;
+        modalEditUser.type = 'user';
+        modalEditUser.value = cellInfo.original.user;
+        modalEditUser.data = cellInfo.original.groupList.split(',');
+        modalEditUser.index = cellInfo.index;
+        this.setState({
+            modalEditUser
+        })
+    }
+    editUserOnchange = (e) => {
+        let modalEditUser = Object.assign({}, this.state.modalEditUser);
+        const temp = e.map((item) => item.value)
+        modalEditUser.data = temp;
+        this.setState({ modalEditUser })
+    }
+    editUserOver = () => {
+        let modalEditUser = Object.assign({}, this.state.modalEditUser);
+        let activeList = this.state.activeList.slice(0);
+        const group = modalEditUser.value;
+        activeList[modalEditUser.index].groupList = modalEditUser.data;
+        activeList[modalEditUser.index].groupNumber = modalEditUser.data.length;
+        modalEditUser.show = false;
+        this.setState({
+            modalEditUser: modalEditUser,
+            activeList: activeList,
+        })
+    }
+    //user add user
+    modalAddUser = () => {
+        let modalAddUser = Object.assign({}, this.state.modalAddUser);
+        modalAddUser.show = true;
+        this.setState({
+            modalAddUser
+        })
+    }
+    addUserOnchangeUsername = (e) => {
+        let modalAddUser = Object.assign({}, this.state.modalAddUser);
+        let activeList = this.state.activeList;
 
+        modalAddUser.userName = e.target.value;
+        for (let i = 0; i < activeList.length; i++) {
+            // console.log(activeList[i])
+            if (activeList[i].user !== e.target.value && e.target.value !== '') {
+                modalAddUser.groupNameControl = 'success';
+                modalAddUser.buttonControl = false;
+            } else {
+                modalAddUser.groupNameControl = 'error';
+                modalAddUser.buttonControl = true;
+                break;
+            }
+        }
+        this.setState({ modalAddUser })
+    }
+    addUserOnchangeGroup = (e) => {
+        let modalAddUser = Object.assign({}, this.state.modalAddUser);
+        const temp = e.map((item) => item.value)
+        modalAddUser.data = temp;
+        this.setState({ modalAddUser })
+    }
+    addUserOver = () => {
+        let modalAddUser = Object.assign({}, this.state.modalAddUser);
+        let activeList = this.state.activeList.slice(0);
+        const temp = {
+            type: 'user',
+            user: modalAddUser.userName,
+            groupNumber: modalAddUser.data.length,
+            groupList: modalAddUser.data,
+        }
+        activeList.unshift(temp);
+        modalAddUser = {
+            show: false,
+            userName: '',
+            data: [],
+        }
+        this.setState({
+            modalAddUser: modalAddUser,
+            activeList: activeList,
+        })
+    }
     render() {
         let renderModalDelete = () => {
             return (
@@ -274,7 +415,10 @@ export default class Authority extends React.PureComponent {
                     </Modal.Body>
                     <Modal.Footer>
                         <Button onClick={this.close}>Cannel</Button>
-                        <Button bsStyle="primary" onClick={this.deleteGroupOver}>Delete</Button>
+                        {this.state.modalDelete.type === 'group'
+                            ? <Button bsStyle="primary" onClick={this.deleteGroupOver}>Delete</Button>
+                            : <Button bsStyle="primary" onClick={this.deleteUserOver}>Delete</Button>}
+
                     </Modal.Footer>
                 </Modal>
             )
@@ -290,7 +434,7 @@ export default class Authority extends React.PureComponent {
                     </Modal.Header>
                     <Modal.Body>
                         <Panel header="Users">
-                            <FormGroup validationState={this.state.modalAddGroup.groupNameControl}>
+                            <FormGroup >
                                 <Select
                                     name="form-field-name"
                                     multi
@@ -305,6 +449,36 @@ export default class Authority extends React.PureComponent {
                     <Modal.Footer>
                         <Button onClick={this.close}>Cannel</Button>
                         <Button bsStyle="primary" onClick={this.editGroupOver}>Edit</Button>
+                    </Modal.Footer>
+                </Modal>
+            )
+        }
+        let renderModalEditUser = () => {
+            return (
+                <Modal
+                    show={this.state.modalEditUser.show}
+                    onHide={this.close}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Edit the <span className='strong'>{this.state.modalEditUser.value}</span>({this.state.modalEditUser.type}) </Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Panel header="Users">
+                            <FormGroup >
+                                <Select
+                                    name="form-field-name"
+                                    multi
+                                    onChange={(e) => this.editUserOnchange(e)}
+                                    value={this.state.modalEditUser.data}
+                                    options={this.state.optionsGroup}
+                                />
+                            </FormGroup>
+                        </Panel>
+
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.close}>Cannel</Button>
+                        <Button bsStyle="primary" onClick={this.editUserOver}>Edit</Button>
                     </Modal.Footer>
                 </Modal>
             )
@@ -358,6 +532,46 @@ export default class Authority extends React.PureComponent {
                 </Modal>
             )
         }
+        let renderModalAddUser = () => {
+            return (
+                <Modal
+                    show={this.state.modalAddUser.show}
+                    onHide={this.close}
+                >
+                    <Modal.Header closeButton>
+                        <Modal.Title>Add the <span className='strong'>User</span></Modal.Title>
+                    </Modal.Header>
+
+                    <Modal.Body>
+                        <Panel header="User">
+                            <FormGroup validationState={this.state.modalAddUser.groupNameControl}>
+                                <InputGroup>
+                                    <InputGroup.Addon>User name</InputGroup.Addon>
+                                    <FormControl type="text" placeholder='user name' value={this.state.modalAddUser.userName}
+                                        onChange={(e) => this.addUserOnchangeUsername(e)} />
+                                </InputGroup>
+                            </FormGroup>
+                            <FormGroup>
+                                <InputGroup>
+                                    <InputGroup.Addon>Group</InputGroup.Addon>
+                                    <Select
+                                        name="form-field-name"
+                                        multi
+                                        onChange={(e) => this.addUserOnchangeGroup(e)}
+                                        value={this.state.modalAddUser.data}
+                                        options={this.state.optionsGroup}
+                                    />
+                                </InputGroup>
+                            </FormGroup>
+                        </Panel>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button onClick={this.close}>Cannel</Button>
+                        <Button bsStyle="primary" onClick={this.addUserOver} disabled={this.state.modalAddUser.buttonControl}>Add</Button>
+                    </Modal.Footer>
+                </Modal>
+            )
+        }
 
         return (
             <div>
@@ -369,16 +583,22 @@ export default class Authority extends React.PureComponent {
                         data={this.state.activeList}
 
                         descriptionOnchange={this.descriptionOnchange}
-                        modalEditGroup={this.modalEditGroup}
                         modalDeleteGroup={this.modalDeleteGroup}
+                        modalEditGroup={this.modalEditGroup}
                         modalAddGroup={this.modalAddGroup}
+
+                        modalDeleteUser={this.modalDeleteUser}
+                        modalEditUser={this.modalEditUser}
+                        modalAddUser={this.modalAddUser}
                     />
                 </Col>
 
                 <Col xsHidden smHidden md={1}></Col>
                 {renderModalDelete()}
                 {renderModalEditGroup()}
+                {renderModalEditUser()}
                 {renderModalAddGroup()}
+                {renderModalAddUser()}
             </div>
         )
     }
