@@ -12,7 +12,7 @@ var index = require('./routes/index');
 var operationAndMaintenanceTools=require('./routes/operationAndMaintenanceTools');
 //data monitoring and alarm
 var dataMonitoringAndAlarm=require('./routes/dataMonitoringAndAlarm');
-
+var authority=require('./routes/authority')
 
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -46,7 +46,7 @@ app.use('/', index);
 // app.use('/restart',restart);
 app.use('/dataMonitoringAndAlarm',dataMonitoringAndAlarm);
 app.use('/operationAndMaintenanceTools',operationAndMaintenanceTools);
-
+app.use('/authority',authority)
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');

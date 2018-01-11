@@ -16,7 +16,9 @@ export default class Authority extends React.PureComponent {
             userList: [],
             activeList: [],
             optionsUser: [],
+
             optionsGroup: [],
+
 
             modalDelete: {
                 show: false,
@@ -62,6 +64,7 @@ export default class Authority extends React.PureComponent {
             headers: {
                 'Content-Type': 'application/json'
             },
+
             body: JSON.stringify({})
         })
             .then(res => res.json())
@@ -91,6 +94,9 @@ export default class Authority extends React.PureComponent {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({})
+
+         
+
         })
             .then(res => res.json())
             .then(json => {
@@ -111,6 +117,7 @@ export default class Authority extends React.PureComponent {
                 })
             })
     }
+
     redirectToUser = () => {
         fetch('http://bigdata-view.cootekservice.com:50056/authority/user/getData', {
             method: "POST",
@@ -119,6 +126,7 @@ export default class Authority extends React.PureComponent {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({})
+
         })
             .then(res => res.json())
             .then(json => {
@@ -137,6 +145,7 @@ export default class Authority extends React.PureComponent {
                     optionsGroup: optionsGroup,
                 })
             })
+
 
     }
     renderButtonToolbar = () => {
@@ -434,7 +443,9 @@ export default class Authority extends React.PureComponent {
                     </Modal.Header>
                     <Modal.Body>
                         <Panel header="Users">
+
                             <FormGroup >
+
                                 <Select
                                     name="form-field-name"
                                     multi
