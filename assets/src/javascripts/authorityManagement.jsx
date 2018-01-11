@@ -11,19 +11,13 @@ export default class Authority extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            groupList: [],
+            userOrGroup: 'group',
+            groupList: [],//[{type:'group',group:'',description:'',userNumber:num,userList:[]}]
             userList: [],
             activeList: [],
-            userOrGroup: 'group',
-            optionsUser: [
-                { label: 'user11', value: 'user11' },
-                { label: 'user12', value: 'user12' },
-                { label: 'user13', value: 'user13' },
-                { label: 'user21', value: 'user21' },
-                { label: 'user23', value: 'user22' },
-                { label: 'user23', value: 'user23' },
-                { label: 'user24', value: 'user24' },
-            ],
+            optionsUser: [],
+            // optionsGroup: [],
+
             modalDelete: {
                 show: false,
                 type: '',
@@ -38,7 +32,7 @@ export default class Authority extends React.PureComponent {
                 index: null,
             },
             modalAddGroup: {
-                buttonControl: 'true',
+                buttonControl: true,
                 groupNameControl: 'error',
                 show: false,
                 groupName: '',
@@ -48,54 +42,74 @@ export default class Authority extends React.PureComponent {
         }
     }
     componentDidMount() {
-        const group = [
-            {
-                type: 'group',
-                group: 'group1',
-                description: 'description1',
-                userNumber: 3,
-                userList: ['user11', 'user12', 'user13']
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/getData', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
             },
-            {
-                type: 'group',
-                group: 'group2',
-                description: 'description2',
-                userNumber: 4,
-                userList: ['user21', 'user22', 'user23', 'user24']
-            },
-        ];
-        const user = [
-            {
-                type: 'user',
-                groups: 'group1',
-                description: 'description1',
-                user: 'user1',
-            },
-            {
-                type: 'user',
-                groups: 'group2',
-                description: 'description2',
-                user: 'user2',
-            },
-        ];
-        this.setState({
-            userOrGroup: 'group',
-            groupList: group,
-            activeList: group,
+            body: JSON.stringify({
+                activePage: 1
+            })
         })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let optionsUser = [];
+                json.userName.map((item, index) => {
+                    optionsUser.push({
+                        label: item,
+                        value: item,
+                    })
+                })
+                this.setState({
+                    userOrGroup: 'group',
+                    groupList: json.groupList,
+                    activeList: json.groupList,
+                    optionsUser: optionsUser,
+                    // optionsGroup: json.groupName,
+                })
+            })
     }
-    switchUserOrGroup = () => {
-        if (this.state.userOrGroup === 'group') {
-            this.setState({ userOrGroup: 'user', })
-        } else {
-            this.setState({ userOrGroup: 'group', })
-        }
+   
+    redirectToUser=()=>{
+        this.setState({ userOrGroup: 'user', })
+    }
+    redirectToGroup=()=>{
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/getData', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                activePage: 1
+            })
+        })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let optionsUser = [];
+                json.userName.map((item, index) => {
+                    optionsUser.push({
+                        label: item,
+                        value: item,
+                    })
+                })
+                this.setState({
+                    userOrGroup: 'group',
+                    groupList: json.groupList,
+                    activeList: json.groupList,
+                    optionsUser: optionsUser,
+                    // optionsGroup: json.groupName,
+                })
+            })
     }
     renderButtonToolbar = () => {
         if (this.state.userOrGroup === 'group') {
             return (
                 <ButtonToolbar>
-                    <Button bsStyle="primary" onClick={this.switchUserOrGroup} >User</Button>
+                    <Button bsStyle="primary" onClick={this.redirectToUser} >User</Button>
                     <Button disabled  >Group</Button>
                 </ButtonToolbar>
             );
@@ -103,7 +117,7 @@ export default class Authority extends React.PureComponent {
             return (
                 <ButtonToolbar>
                     <Button disabled  >User</Button>
-                    <Button bsStyle="primary" onClick={this.switchUserOrGroup} >Group</Button>
+                    <Button bsStyle="primary" onClick={this.redirectToGroup} >Group</Button>
                 </ButtonToolbar>
             );
         }
@@ -153,7 +167,7 @@ export default class Authority extends React.PureComponent {
             activeList: activeList,
         })
     }
-    //group add user
+    //group edit user
     modalEditGroup = (cellInfo) => {
         // console.log(type + '_' + value + ' editRow')
         let modalEditGroup = Object.assign({}, this.state.modalEditGroup);
@@ -177,6 +191,7 @@ export default class Authority extends React.PureComponent {
         let activeList = this.state.activeList.slice(0);
         const group = modalEditGroup.value;
         activeList[modalEditGroup.index].userList = modalEditGroup.data;
+        activeList[modalEditGroup.index].userNumber = modalEditGroup.data.length;
         modalEditGroup.show = false;
         this.setState({
             modalEditGroup: modalEditGroup,
@@ -276,13 +291,13 @@ export default class Authority extends React.PureComponent {
                     <Modal.Body>
                         <Panel header="Users">
                             <FormGroup validationState={this.state.modalAddGroup.groupNameControl}>
-                                    <Select
-                                        name="form-field-name"
-                                        multi
-                                        onChange={(e) => this.editGroupOnchange(e)}
-                                        value={this.state.modalEditGroup.data}
-                                        options={this.state.optionsUser}
-                                    />
+                                <Select
+                                    name="form-field-name"
+                                    multi
+                                    onChange={(e) => this.editGroupOnchange(e)}
+                                    value={this.state.modalEditGroup.data}
+                                    options={this.state.optionsUser}
+                                />
                             </FormGroup>
                         </Panel>
 
