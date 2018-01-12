@@ -9,12 +9,10 @@ router.get('/', function (req, res, next) {
 });
 router.post('/group/getData', function (req, res, next) {
     group.getData(req, res, next);
-	//console.log(req)
 });
-
-//router.post('/group/', function (req, res, next) {
-    //group.getData2(req, res, next);
-//});
+router.post('/group/deleteUser', function (req, res, next) {
+    group.deleteUser(req, res, next);
+});
 router.post('/user/getData', function (req, res, next) {
     user.getData(req, res, next);
     //console.log(req)
