@@ -1,3 +1,4 @@
+var mykafka = require('../kafka/mykafka');
 module.exports.getData = function  (req,res,next) {
 	let async = require("async");
 	let mysql = require('mysql');
@@ -70,3 +71,32 @@ module.exports.getData = function  (req,res,next) {
 		}
 	]);
 };
+
+module.exports.deleteUser = function  (req,res,next) {
+    //console.log(req.body.type);
+    //console.log(req.body.groupName);
+    let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
+    let topic = 'picasso_cmd';
+    let jsonMessage = JSON.stringify({name:'just test'})
+    mykafka.sendMessage(res,zookeeper,topic,jsonMessage);
+}
+
+module.exports.editGroupList = function  (req,res,next) {
+    //console.log(req.body.type);
+    //console.log(req.body.groupName);
+    let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
+    let topic = 'picasso_cmd';
+    let jsonMessage = JSON.stringify({name:'just test'})
+    mykafka.sendMessage(res,zookeeper,topic,jsonMessage);
+}
+
+module.exports.addUser = function  (req,res,next) {
+    //console.log(req.body.type);
+    //console.log(req.body.groupName);
+    let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
+    let topic = 'picasso_cmd';
+    let jsonMessage = JSON.stringify({name:'just test'})
+    mykafka.sendMessage(res,zookeeper,topic,jsonMessage);
+}
+
+
