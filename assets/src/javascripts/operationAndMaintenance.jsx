@@ -90,8 +90,8 @@ export default class Operation extends React.PureComponent {
                 option: option
             })
         })
-            // .then(res => res.json())
-            // .then(json => console.log(json));
+            .then(res => res.json())
+            .then(json => console.log(json));
     }
 
     render() {
