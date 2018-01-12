@@ -95,7 +95,7 @@ export default class Authority extends React.PureComponent {
             },
             body: JSON.stringify({})
 
-         
+
 
         })
             .then(res => res.json())
@@ -187,7 +187,6 @@ export default class Authority extends React.PureComponent {
         })
     }
 
-
     descriptionOnchange = (data, cellInfo) => {
         let activeList = this.state.activeList.slice(0);
         activeList[cellInfo.index][cellInfo.column.id] = data;
@@ -195,7 +194,6 @@ export default class Authority extends React.PureComponent {
     }
     //group delete group
     modalDeleteGroup = (cellInfo) => {
-        // console.log(type + '_' + value)
         let modalDelete = Object.assign({}, this.state.modalDelete);
         modalDelete.show = true;
         modalDelete.type = 'group';
@@ -206,15 +204,39 @@ export default class Authority extends React.PureComponent {
         })
     }
     deleteGroupOver = () => {
-        let modalDelete = Object.assign({}, this.state.modalDelete);
-        let activeList = this.state.activeList.slice(0);
-        activeList.splice(modalDelete.index, 1);
-        modalDelete.show = false;
-        console.log(modalDelete)
-        this.setState({
-            modalDelete: modalDelete,
-            activeList: activeList,
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/deleteUser', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                type: this.state.modalDelete.type,
+                groupName: this.state.modalDelete.value,
+            })
         })
+            .then(res => res.json())
+            .then(json => {
+                let modalDelete = Object.assign({}, this.state.modalDelete);
+                if (json.type === 'success') {
+                    let activeList = this.state.activeList.slice(0);
+                    activeList.splice(modalDelete.index, 1);
+                    modalDelete.show = false;
+                    this.setState({
+                        modalDelete: modalDelete,
+                        activeList: activeList,
+                    })
+                } else {
+                    modalDelete.show = false;
+                    this.setState({
+                        modalDelete: modalDelete,
+                    })
+                }
+            })
+
+
+
     }
     //group edit user
     modalEditGroup = (cellInfo) => {
@@ -309,6 +331,7 @@ export default class Authority extends React.PureComponent {
     //user delete user
     modalDeleteUser = (cellInfo) => {
         let modalDelete = Object.assign({}, this.state.modalDelete);
+
         modalDelete.show = true;
         modalDelete.type = 'user';
         modalDelete.value = cellInfo.original.user;
