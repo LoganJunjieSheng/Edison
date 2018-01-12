@@ -1,4 +1,4 @@
-module.exports.sendMessage = function (zookeeper,topic,jsonMessage) {
+module.exports.sendMessage = function (res,zookeeper,topic,jsonMessage) {
 	let kafka = require('kafka-node');
     let Producer = kafka.Producer;
     let KeyedMessage = kafka.KeyedMessage;
@@ -10,12 +10,27 @@ module.exports.sendMessage = function (zookeeper,topic,jsonMessage) {
         messages: [jsonMessage],
     }];
 	producer.on('ready', function () {
-        console.log('connect kafka')
         producer.send(payloads, function (err, data) {
-            console.log(data);
+            if(err === null){
+                res.json({
+                    type : 'success',
+                    data : data,
+                });
+            } else{
+                res.json({
+                    type : 'defeat',
+                    data : err,
+                });
+
+            }
+
         });
     });
     producer.on('error', function (err) {
-        console.log(err)
+		res.json({
+            type : 'defeat',
+            data : 'err'
+        })
+
     })
 }
