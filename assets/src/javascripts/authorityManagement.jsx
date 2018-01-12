@@ -187,10 +187,37 @@ export default class Authority extends React.PureComponent {
         })
     }
 
+    //group change description
     descriptionOnchange = (data, cellInfo) => {
-        let activeList = this.state.activeList.slice(0);
-        activeList[cellInfo.index][cellInfo.column.id] = data;
-        this.setState({ activeList });
+
+
+
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/editDescription', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                type: 'group',
+                groupName: cellInfo.original.group,
+                description: data,
+            })
+        })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                if (json.type === 'success') {
+                    let activeList = this.state.activeList.slice(0);
+                    activeList[cellInfo.index][cellInfo.column.id] = data;
+                    this.setState({ activeList });
+                } else {
+
+                }
+            })
+
+
     }
     //group delete group
     modalDeleteGroup = (cellInfo) => {
@@ -204,7 +231,7 @@ export default class Authority extends React.PureComponent {
         })
     }
     deleteGroupOver = () => {
-        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/deleteUser', {
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/deleteGroup', {
             method: "POST",
             mode: "cors",
             headers: {
@@ -218,6 +245,7 @@ export default class Authority extends React.PureComponent {
         })
             .then(res => res.json())
             .then(json => {
+                console.log(json)
                 let modalDelete = Object.assign({}, this.state.modalDelete);
                 if (json.type === 'success') {
                     let activeList = this.state.activeList.slice(0);
@@ -234,9 +262,6 @@ export default class Authority extends React.PureComponent {
                     })
                 }
             })
-
-
-
     }
     //group edit user
     modalEditGroup = (cellInfo) => {
@@ -258,16 +283,40 @@ export default class Authority extends React.PureComponent {
         this.setState({ modalEditGroup })
     }
     editGroupOver = () => {
-        let modalEditGroup = Object.assign({}, this.state.modalEditGroup);
-        let activeList = this.state.activeList.slice(0);
-        const group = modalEditGroup.value;
-        activeList[modalEditGroup.index].userList = modalEditGroup.data;
-        activeList[modalEditGroup.index].userNumber = modalEditGroup.data.length;
-        modalEditGroup.show = false;
-        this.setState({
-            modalEditGroup: modalEditGroup,
-            activeList: activeList,
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/editUserList', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                type: 'group',
+                groupName: this.state.modalEditGroup.value,
+                userList: this.state.modalEditGroup.data,
+            })
         })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let modalEditGroup = Object.assign({}, this.state.modalEditGroup);
+                if (json.type === 'success') {
+                    let activeList = this.state.activeList.slice(0);
+                    const group = modalEditGroup.value;
+                    activeList[modalEditGroup.index].userList = modalEditGroup.data;
+                    activeList[modalEditGroup.index].userNumber = modalEditGroup.data.length;
+                    modalEditGroup.show = false;
+                    this.setState({
+                        modalEditGroup: modalEditGroup,
+                        activeList: activeList,
+                    })
+                } else {
+                    modalEditGroup.show = false;
+                    this.setState({
+                        modalEditGroup: modalEditGroup,
+                    })
+                }
+            })
     }
     //group add group
     modalAddGroup = () => {
@@ -306,26 +355,53 @@ export default class Authority extends React.PureComponent {
         this.setState({ modalAddGroup })
     }
     addGroupOver = () => {
-        let modalAddGroup = Object.assign({}, this.state.modalAddGroup);
-        let activeList = this.state.activeList.slice(0);
-        const temp = {
-            type: 'group',
-            group: modalAddGroup.groupName,
-            description: modalAddGroup.description,
-            userNumber: modalAddGroup.data.length,
-            userList: modalAddGroup.data,
-        }
-        activeList.unshift(temp);
-        modalAddGroup = {
-            show: false,
-            groupName: '',
-            description: '',
-            data: [],
-        }
-        this.setState({
-            modalAddGroup: modalAddGroup,
-            activeList: activeList,
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/group/addGroup', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                type: 'group',
+                groupName: this.state.modalAddGroup.groupName,
+                description: this.state.modalAddGroup.description,
+                userList: this.state.modalAddGroup.data,
+            })
         })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let modalAddGroup = Object.assign({}, this.state.modalAddGroup);
+                if (json.type === 'success') {
+                    let activeList = this.state.activeList.slice(0);
+                    const temp = {
+                        type: 'group',
+                        group: modalAddGroup.groupName,
+                        description: modalAddGroup.description,
+                        userNumber: modalAddGroup.data.length,
+                        userList: modalAddGroup.data,
+                    }
+                    activeList.unshift(temp);
+                    modalAddGroup = {
+                        buttonControl: true,
+                        groupNameControl: 'error',
+                        show: false,
+                        groupName: '',
+                        description: '',
+                        data: [],
+                    }
+                    this.setState({
+                        modalAddGroup: modalAddGroup,
+                        activeList: activeList,
+                    })
+                } else {
+                    modalAddGroup.show = false;
+                    this.setState({
+                        modalAddGroup: modalAddGroup,
+                    })
+                }
+            })
     }
 
     //user delete user
@@ -341,14 +417,37 @@ export default class Authority extends React.PureComponent {
         })
     }
     deleteUserOver = () => {
-        let modalDelete = Object.assign({}, this.state.modalDelete);
-        let activeList = this.state.activeList.slice(0);
-        activeList.splice(modalDelete.index, 1);
-        modalDelete.show = false;
-        this.setState({
-            modalDelete: modalDelete,
-            activeList: activeList,
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/user/deleteUser', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                type: this.state.modalDelete.type,
+                userName: this.state.modalDelete.value,
+            })
         })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let modalDelete = Object.assign({}, this.state.modalDelete);
+                if (json.type === 'success') {
+                    let activeList = this.state.activeList.slice(0);
+                    activeList.splice(modalDelete.index, 1);
+                    modalDelete.show = false;
+                    this.setState({
+                        modalDelete: modalDelete,
+                        activeList: activeList,
+                    })
+                } else {
+                    modalDelete.show = false;
+                    this.setState({
+                        modalDelete: modalDelete,
+                    })
+                }
+            })
     }
     //group edit user
     modalEditUser = (cellInfo) => {
@@ -369,16 +468,40 @@ export default class Authority extends React.PureComponent {
         this.setState({ modalEditUser })
     }
     editUserOver = () => {
-        let modalEditUser = Object.assign({}, this.state.modalEditUser);
-        let activeList = this.state.activeList.slice(0);
-        const group = modalEditUser.value;
-        activeList[modalEditUser.index].groupList = modalEditUser.data;
-        activeList[modalEditUser.index].groupNumber = modalEditUser.data.length;
-        modalEditUser.show = false;
-        this.setState({
-            modalEditUser: modalEditUser,
-            activeList: activeList,
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/user/editGroupList', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                type: 'user',
+                userName: this.state.modalEditUser.value,
+                groupList: this.state.modalEditUser.data,
+            })
         })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let modalEditUser = Object.assign({}, this.state.modalEditUser);
+                if (json.type === 'success') {
+                    let activeList = this.state.activeList.slice(0);
+                    const group = modalEditUser.value;
+                    activeList[modalEditUser.index].groupList = modalEditUser.data;
+                    activeList[modalEditUser.index].groupNumber = modalEditUser.data.length;
+                    modalEditUser.show = false;
+                    this.setState({
+                        modalEditUser: modalEditUser,
+                        activeList: activeList,
+                    })
+                } else {
+                    modalEditUser.show = false;
+                    this.setState({
+                        modalEditUser: modalEditUser,
+                    })
+                }
+            })
     }
     //user add user
     modalAddUser = () => {
@@ -413,24 +536,50 @@ export default class Authority extends React.PureComponent {
         this.setState({ modalAddUser })
     }
     addUserOver = () => {
-        let modalAddUser = Object.assign({}, this.state.modalAddUser);
-        let activeList = this.state.activeList.slice(0);
-        const temp = {
-            type: 'user',
-            user: modalAddUser.userName,
-            groupNumber: modalAddUser.data.length,
-            groupList: modalAddUser.data,
-        }
-        activeList.unshift(temp);
-        modalAddUser = {
-            show: false,
-            userName: '',
-            data: [],
-        }
-        this.setState({
-            modalAddUser: modalAddUser,
-            activeList: activeList,
+        fetch('http://bigdata-view.cootekservice.com:50056/authority/user/addUser', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+
+            body: JSON.stringify({
+                type: 'group',
+                groupName: this.state.modalAddUser.userName,
+                userList: this.state.modalAddUser.data,
+            })
         })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                let modalAddUser = Object.assign({}, this.state.modalAddUser);
+                if (json.type === 'success') {
+                    let activeList = this.state.activeList.slice(0);
+                    const temp = {
+                        type: 'user',
+                        user: modalAddUser.userName,
+                        groupNumber: modalAddUser.data.length,
+                        groupList: modalAddUser.data,
+                    }
+                    activeList.unshift(temp);
+                    modalAddUser = {
+                        buttonControl: true,
+                        groupNameControl: 'error',
+                        show: false,
+                        userName: '',
+                        data: [],
+                    }
+                    this.setState({
+                        modalAddUser: modalAddUser,
+                        activeList: activeList,
+                    })
+                } else {
+                    modalAddUser.show = false;
+                    this.setState({
+                        modalAddUser: modalAddUser,
+                    })
+                }
+            })
     }
     render() {
         let renderModalDelete = () => {
