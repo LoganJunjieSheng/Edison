@@ -153,6 +153,7 @@ module.exports.addUser = function  (req,res,next) {
 			user_name:user_name,
 		})	
 		console.log(jsonMessage)
+		mykafka.sendMessageLoop(res,zookeeper,topic,jsonMessage);
 	})
 	res.json({type:'success'})
 }
