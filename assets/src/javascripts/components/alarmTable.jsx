@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Checkbox, Table,ButtonToolbar } from 'react-bootstrap';
+import { Button, Checkbox, Table, ButtonToolbar } from 'react-bootstrap';
 
 import '../../stylesheets/index.css'
 
@@ -35,13 +35,13 @@ export default class AlarmTable extends React.PureComponent {
             datas.push(
                 <tr key={data.type} className={checked}>
                     {/* <td> */}
-                        {/* <Checkbox
+                    {/* <Checkbox
                             inline
                             checked={data.checked}
                             onClick={() => this.handleCheck(data.id, index)}
                         > */}
-                        {/* {index + 1} */}
-                        {/* </Checkbox> */}
+                    {/* {index + 1} */}
+                    {/* </Checkbox> */}
                     {/* </td> */}
                     <td>{data.type}</td>
                     <td>{data.server}</td>
@@ -50,8 +50,9 @@ export default class AlarmTable extends React.PureComponent {
                     <td>{data.status}</td>
                     <td>
                         <ButtonToolbar>
-                            <Button bsSize="xsmall" bsStyle="primary" className='btn-mb10'
-                                onClick={() => this.handleAck(data, index)}>ack</Button>
+                            {(data.status === 1)
+                                && <Button bsSize="xsmall" bsStyle="primary" className='btn-mb10'
+                                    onClick={() => this.handleAck(data, index)}>ack</Button>}
                             {radio}
                         </ButtonToolbar>
                     </td>
@@ -63,15 +64,15 @@ export default class AlarmTable extends React.PureComponent {
                 <thead>
                     <tr>
                         {/* <th> */}
-                            {/* <Checkbox
+                        {/* <Checkbox
                             inline
                             
                             
                             ={this.state.checkAll}
                             onClick={this.handleCheckAll}
                         > */}
-                            {/* # */}
-                         {/* </Checkbox> */}
+                        {/* # */}
+                        {/* </Checkbox> */}
                         {/* </th> */}
                         <th>Type</th>
                         <th>Server</th>

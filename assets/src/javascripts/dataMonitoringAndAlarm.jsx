@@ -66,6 +66,7 @@ export default class Alarm extends React.PureComponent {
                     dataList: temp,
                     pages: json.pages,
                 })
+                console.log(temp)
             });
     }
     //处理多选框事件
@@ -198,7 +199,7 @@ export default class Alarm extends React.PureComponent {
                         let dod = [];
                         let mom = [];
                         data.ratioList.map((item, index) => {
-                            console.log(item)
+                            console.log(item);
                             current.push(item.current);
                             date.push(item.date.substring(0, 19));
                             dod.push((item.current - item.last_day) / item.last_day * 100);
