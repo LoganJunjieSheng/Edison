@@ -152,15 +152,15 @@ export default class Authority extends React.PureComponent {
         if (this.state.userOrGroup === 'group') {
             return (
                 <ButtonToolbar>
-                    <Button bsStyle="primary" onClick={this.redirectToUser} >User</Button>
-                    <Button disabled  >Group</Button>
+                    <Button  onClick={this.redirectToUser} >User</Button>
+                    <Button bsStyle="primary" disabled  >Group</Button>
                 </ButtonToolbar>
             );
         } else {
             return (
                 <ButtonToolbar>
-                    <Button disabled  >User</Button>
-                    <Button bsStyle="primary" onClick={this.redirectToGroup} >Group</Button>
+                    <Button bsStyle="primary" disabled  >User</Button>
+                    <Button  onClick={this.redirectToGroup} >Group</Button>
                 </ButtonToolbar>
             );
         }
@@ -189,9 +189,6 @@ export default class Authority extends React.PureComponent {
 
     //group change description
     descriptionOnchange = (data, cellInfo) => {
-
-
-
         fetch('http://bigdata-view.cootekservice.com:50056/authority/group/editDescription', {
             method: "POST",
             mode: "cors",
@@ -216,8 +213,6 @@ export default class Authority extends React.PureComponent {
 
                 }
             })
-
-
     }
     //group delete group
     modalDeleteGroup = (cellInfo) => {
@@ -449,7 +444,7 @@ export default class Authority extends React.PureComponent {
                 }
             })
     }
-    //group edit user
+    //user edit group
     modalEditUser = (cellInfo) => {
         let modalEditUser = Object.assign({}, this.state.modalEditUser);
         modalEditUser.show = true;
@@ -545,8 +540,8 @@ export default class Authority extends React.PureComponent {
 
             body: JSON.stringify({
                 type: 'group',
-                groupName: this.state.modalAddUser.userName,
-                userList: this.state.modalAddUser.data,
+                userName: this.state.modalAddUser.userName,
+                groupList: this.state.modalAddUser.data,
             })
         })
             .then(res => res.json())
