@@ -71,6 +71,21 @@ export default class Operation extends React.PureComponent {
         })
     }
 
+    showModalZeppelin = (e) => {
+        const value = e.target.value;
+        let valueArray = value.split('-');
+        // let operation = valueArray[0];
+        // let server = valueArray[1];
+        // let option = valueArray[2];
+        this.setState({
+            modalId: value,
+            modalShow: true,
+            modalTitle: 'Restart Zeppelin ',
+            modalBody: 'Are you sure that you want to restart the Zeppelin ?',
+            modalDo: 'Restart',
+        })
+    }
+
     postValue = (id) => {
         let idArray = id.split('-');
         let operation = idArray[0];
@@ -124,6 +139,12 @@ export default class Operation extends React.PureComponent {
                         <div className='page-title' >Restart Rainbow2.0</div>
                         <Button bsClass='btn btn-default  btn-mr20' bsSize="large" value='restart-rainbow-restart'
                             onClick={(e) => this.showModalRainbow(e)}>RESTART</Button>
+                    </div>
+
+                    <div className="page-item">
+                        <div className='page-title' >Restart Zeppelin</div>
+                        <Button bsClass='btn btn-default  btn-mr20' bsSize="large" value='restart-Zeppelin-restart'
+                            onClick={(e) => this.showModalZeppelin(e)}>RESTART</Button>
                     </div>
 
                     <ModalPop
