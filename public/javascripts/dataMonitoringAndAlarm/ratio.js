@@ -13,7 +13,10 @@ module.exports.getRatio = function (req, res, next) {
     
     connection.query(sql, function (err, results, fields) {
         if (err) throw err;
-		console.log(results)
+		//console.log(typeof(results[results.length-1].date));
+		results.map((item)=>{
+			item.date=item.date.toLocaleDateString();
+		});
         res.json({
         'ratioList':results
         })

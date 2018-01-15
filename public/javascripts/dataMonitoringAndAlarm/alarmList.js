@@ -41,6 +41,9 @@ module.exports.getAlarmList = function (req, res, next) {
 			    alermList[index]['hasRatio']=false;
 			}
 		    })
+			alermList.map((item)=>{
+            item.time=item.time.toLocaleDateString();
+			})
 		    callback(null,alermList)
 		}	
 	    );

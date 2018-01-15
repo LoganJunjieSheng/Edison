@@ -106,16 +106,16 @@ module.exports.editUserList = function  (req,res,next) {
 			results.map((item)=>{
 				user_list_old.push(item.username);
 			});
-			console.log(user_list_old);
-			console.log(user_list_new);
+			//console.log(user_list_old);
+			//console.log(user_list_new);
 			let old_set=new Set(user_list_old);
 			let new_set=new Set(user_list_new);
 			let remove_set=new Set([...old_set].filter(x => !new_set.has(x)));
 			let add_set=new Set([...new_set].filter(x => !old_set.has(x)));
 			let remove_list=[...remove_set];
 			let add_list=[...add_set];
-			console.log(add_list);
-			console.log(remove_list);
+			//console.log(add_list);
+			//console.log(remove_list);
 			add_list.map((item)=>{
 				jsonMessage = JSON.stringify({
 					action:'group_add_user',
