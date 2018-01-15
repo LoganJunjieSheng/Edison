@@ -114,8 +114,8 @@ export default class Operation extends React.PureComponent {
 
                     <div className="page-item">
                         <div className='page-title' >Switch Druid</div>
-                        <Button bsClass='btn btn-default  btn-mr20 btn-mb20' bsSize="large" value='switch-druid-handoop'
-                            onClick={(e) => this.showModalDruid(e)}>HANDOOP</Button>
+                        <Button bsClass='btn btn-default  btn-mr20 btn-mb20' bsSize="large" value='switch-druid-hadoop'
+                            onClick={(e) => this.showModalDruid(e)}>HADOOP</Button>
                         <Button bsClass='btn btn-default  btn-mr20 btn-mb20' bsSize="large" value='switch-druid-secondary'
                             onClick={(e) => this.showModalDruid(e)}>SECONDARY</Button>
                     </div>
