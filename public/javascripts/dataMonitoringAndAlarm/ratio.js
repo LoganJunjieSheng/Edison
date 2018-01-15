@@ -13,7 +13,7 @@ module.exports.getRatio = function (req, res, next) {
     
     connection.query(sql, function (err, results, fields) {
         if (err) throw err;
-	//console.log(results)
+		console.log(results)
         res.json({
         'ratioList':results
         })
