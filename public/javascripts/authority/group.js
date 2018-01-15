@@ -94,7 +94,6 @@ module.exports.editUserList = function  (req,res,next) {
 	user_list_new=req.body.userList;
     let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
     let topic = 'picasso_cmd';
-    let jsonMessage = JSON.stringify({name:'just test'})
 	async.waterfall([
 		function (callback) {
 			let sql='select * from hadoop_user_group where group_name ='+"'"+group_name+"'";
@@ -179,6 +178,7 @@ module.exports.addGroup = function  (req,res,next) {
 			group_name:group_name,
 			user_name:item
 		});
+		mykafka.sendMessageLoop(res,zookeeper,topic,jsonMessage);
 		console.log(jsonMessage);
 	});
 	res.json({
