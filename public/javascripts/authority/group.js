@@ -77,14 +77,38 @@ module.exports.getData = function (req, res, next) {
 
 module.exports.deleteGroup = function (req, res, next) {
 	let group_name = req.body.groupName;
-	let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
-	let topic = 'picasso_cmd';
-	let jsonMessage = JSON.stringify({
-		action: 'group_delete_group',
-		group_name: group_name,
-	})
-	mykafka.sendMessage(res, zookeeper, topic, jsonMessage);
-	console.log(jsonMessage)
+	//let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
+	//let topic = 'picasso_cmd';
+	//let jsonMessage = JSON.stringify({
+	//	action: 'group_delete_group',
+	//	group_name: group_name,
+	//})
+    //        });
+	//mykafka.sendMessage(res, zookeeper, topic, jsonMessage);
+	//console.log(jsonMessage)
+	async.waterfall([
+		function (callback) {
+			let sql = 'delete from hadoop_user_group where group_name ='+"'"+group_name+"'";
+			console.log(sql)
+			connection.query(sql, function (err, results, fields) {
+				if (err) throw err;
+				callback(err, results);
+			})
+		},
+		function (results,callback) {
+			console.log(results);
+			let sql = 'delete from hadoop_group_meta where group_name ='+"'"+group_name+"'";
+            console.log(sql)
+            connection.query(sql, function (err, results, fields) {
+                if (err) throw err;
+                callback(err, results);
+            })
+		},
+		function (results){
+			console.log(results);
+			res.json({type:'success'});
+		}
+	]);
 }
 
 module.exports.editUserList = function (req, res, next) {
