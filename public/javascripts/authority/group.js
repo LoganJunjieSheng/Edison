@@ -55,7 +55,6 @@ module.exports.getData = function (req, res, next) {
 						userList.push(item1.username);
 					}
 				})
-				//let description='';
 				groupList.push({
 					type: 'group',
 					group: item,
@@ -87,16 +86,13 @@ module.exports.deleteGroup = function (req, res, next) {
 			})
 		},
 		function (results, callback) {
-			console.log(results);
 			let sql = 'delete from hadoop_group_meta where group_name =' + "'" + group_name + "'";
-			console.log(sql)
 			connection.query(sql, function (err, results, fields) {
 				if (err) throw err;
 				callback(err, results);
 			})
 		},
 		function (results) {
-			console.log(results);
 			res.json({
 				type: 'success'
 			});
@@ -145,7 +141,7 @@ module.exports.editUserList = function (req, res, next) {
 					callback(err, remove_list);
 				});
 			} else {
-				 callback(null, remove_list)
+				callback(null, remove_list)
 			}
 		},
 		function (remove_list, callback) {
@@ -157,7 +153,6 @@ module.exports.editUserList = function (req, res, next) {
 						values: [item, group_name],
 					})
 				});
-				//console.log(sql)
 				async.map(sql,
 					function (item, callbackMap) {
 						connection.query(item, function (err, results) {
@@ -173,8 +168,10 @@ module.exports.editUserList = function (req, res, next) {
 			}
 		},
 	], function (err, result) {
-		if(err===null){
-			res.json({type:'success'});
+		if (err === null) {
+			res.json({
+				type: 'success'
+			});
 		}
 	});
 }
@@ -182,15 +179,6 @@ module.exports.editUserList = function (req, res, next) {
 module.exports.editDescription = function (req, res, next) {
 	let group_name = req.body.groupName;
 	let description = req.body.description
-	//let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
-	//let topic = 'picasso_cmd';
-	//let jsonMessage = JSON.stringify({
-	//	action: 'group_edit_description',
-	//	group_name: group_name,
-	//	description: description,
-	//});
-	//mykafka.sendMessage(res, zookeeper, topic, jsonMessage);
-	//console.log(jsonMessage)
 	async.waterfall([
 		function (callback) {
 			let sql = {
@@ -225,33 +213,6 @@ module.exports.addGroup = function (req, res, next) {
 	let group_name = req.body.groupName;
 	let description = req.body.description;
 	let user_list = req.body.userList;
-	//let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
-	//let topic = 'picasso_cmd';
-	//let jsonMessage = JSON.stringify({
-	//	action: 'group_add_group',
-	//	group_name: group_name,
-	//});
-	//mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
-	//console.log(jsonMessage);
-	//jsonMessage = JSON.stringify({
-	//	action: 'group_edit_description',
-	//	group_name: group_name,
-	//	description: description,
-	//});
-	//mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
-	//console.log(jsonMessage);
-	//user_list.map((item, index) => {
-	//	jsonMessage = JSON.stringify({
-	//		action: 'group_add_user',
-	//		group_name: group_name,
-	//		user_name: item
-	//	});
-	//	mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
-	//	console.log(jsonMessage);
-	//});
-	//res.json({
-	//	type: 'success'
-	//})
 	async.waterfall([
 		function (callback) {
 			let sql = {
@@ -279,7 +240,6 @@ module.exports.addGroup = function (req, res, next) {
 				if (err) throw err;
 				callback(err, results);
 			})
-			//console.log(sql)
 		},
 		function (results) {
 			console.log(results);
@@ -287,9 +247,5 @@ module.exports.addGroup = function (req, res, next) {
 				type: 'success'
 			});
 		}
-
 	])
-
-
-
 }
