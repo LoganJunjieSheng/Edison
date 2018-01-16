@@ -83,30 +83,32 @@ module.exports.deleteGroup = function (req, res, next) {
 	//	action: 'group_delete_group',
 	//	group_name: group_name,
 	//})
-    //        });
+	//        });
 	//mykafka.sendMessage(res, zookeeper, topic, jsonMessage);
 	//console.log(jsonMessage)
 	async.waterfall([
 		function (callback) {
-			let sql = 'delete from hadoop_user_group where group_name ='+"'"+group_name+"'";
+			let sql = 'delete from hadoop_user_group where group_name =' + "'" + group_name + "'";
 			console.log(sql)
 			connection.query(sql, function (err, results, fields) {
 				if (err) throw err;
 				callback(err, results);
 			})
 		},
-		function (results,callback) {
+		function (results, callback) {
 			console.log(results);
-			let sql = 'delete from hadoop_group_meta where group_name ='+"'"+group_name+"'";
-            console.log(sql)
-            connection.query(sql, function (err, results, fields) {
-                if (err) throw err;
-                callback(err, results);
-            })
+			let sql = 'delete from hadoop_group_meta where group_name =' + "'" + group_name + "'";
+			console.log(sql)
+			connection.query(sql, function (err, results, fields) {
+				if (err) throw err;
+				callback(err, results);
+			})
 		},
-		function (results){
+		function (results) {
 			console.log(results);
-			res.json({type:'success'});
+			res.json({
+				type: 'success'
+			});
 		}
 	]);
 }
@@ -134,52 +136,54 @@ module.exports.editUserList = function (req, res, next) {
 			let add_set = new Set([...new_set].filter(x => !old_set.has(x)));
 			let remove_list = [...remove_set];
 			let add_list = [...add_set];
-			let tempParameter=[];
-			let tempValue=[];
+			let tempParameter = [];
+			let tempValue = [];
 
-			if(add_list.length!==0){
+			if (add_list.length !== 0) {
 				add_list.map((item) => {
 					tempParameter.push('(?,?)');
 					tempValue.push(item);
 					tempValue.push(group_name);
 				});
-			 	let sql={
-                	sql:'insert into hadoop_user_group (username,group_name) values '+tempParameter.toString(),
-                	values:tempValue,
-            	}
-            	connection.query(sql, function (err, results, fields) {
-                	if (err) throw err;
-                	callback(err,remove_list);
-            	});
+				let sql = {
+					sql: 'insert into hadoop_user_group (username,group_name) values ' + tempParameter.toString(),
+					values: tempValue,
+				}
+				connection.query(sql, function (err, results, fields) {
+					if (err) throw err;
+					callback(err, remove_list);
+				});
 			} else {
-				callback(null,remove_list)
+				// callback(null, remove_list)
 			}
 		},
-		function(remove_list,callback){
-			if(remove_list.length!==0){
-				let sql=[];
-				remove_list.map((item)=>{
+		function (remove_list, callback) {
+			if (remove_list.length !== 0) {
+				let sql = [];
+				remove_list.map((item) => {
 					sql.push({
-						sql:'delete from hadoop_user_group where username =? and group_name = ?',
-                    	values:[item,group_name],
-					})	
+						sql: 'delete from hadoop_user_group where username =? and group_name = ?',
+						values: [item, group_name],
+					})
 				});
-             	console.log(sql)
-				async.map(sql,function(item,callbackMap){
-					connection.query(item,function(err,results){
-		    		if (err) throw err;
-		    		callbackMap(err,results)
-					});
-				});
+				//console.log(sql)
+				async.map(sql,
+					function (item, callbackMap) {
+						connection.query(item, function (err, results) {
+							if (err) throw err;
+							callbackMap(err, results)
+						});
 					},
-					function(err,results){
-						callback(err,results);
-					}
+					function (err, results) {
+						callback(err, results);
+					})
 			} else {
 				callback(null);
 			}
-		}
-	]);
+		},
+	], function (err, result) {
+		console.log(err);
+	});
 }
 
 module.exports.editDescription = function (req, res, next) {
@@ -196,28 +200,30 @@ module.exports.editDescription = function (req, res, next) {
 	//console.log(jsonMessage)
 	async.waterfall([
 		function (callback) {
-			let sql={
-				sql:'delete from hadoop_group_meta where group_name = ?',
-                values:[group_name],
+			let sql = {
+				sql: 'delete from hadoop_group_meta where group_name = ?',
+				values: [group_name],
 			}
 			connection.query(sql, function (err, results, fields) {
 				if (err) throw err;
 				callback(err, results);
 			})
 		},
-		function (results,callback) {
-            let sql={
-                sql:'insert into hadoop_group_meta (group_name, group_description) values (?,?)',
-                values:[group_name,description],
-            }
-            connection.query(sql, function (err, results, fields) {
-                if (err) throw err;
-                callback(err, results);
-            })
-        },
-		function (results){
+		function (results, callback) {
+			let sql = {
+				sql: 'insert into hadoop_group_meta (group_name, group_description) values (?,?)',
+				values: [group_name, description],
+			}
+			connection.query(sql, function (err, results, fields) {
+				if (err) throw err;
+				callback(err, results);
+			})
+		},
+		function (results) {
 			console.log(results);
-			res.json({type:'success'});
+			res.json({
+				type: 'success'
+			});
 		}
 	]);
 }
@@ -253,42 +259,44 @@ module.exports.addGroup = function (req, res, next) {
 	//res.json({
 	//	type: 'success'
 	//})
-	 async.waterfall([
+	async.waterfall([
 		function (callback) {
-            let sql={
-                sql:'insert into hadoop_group_meta (group_name, group_description) values (?,?)',
-                values:[group_name,description],
-            }
-            connection.query(sql, function (err, results, fields) {
-                if (err) throw err;
-                callback(err, results);
-            })
-        },
-		function (results,callback) {
-			let tempParameter=[];
-			let tempValue=[];
-			user_list.map((item)=>{
+			let sql = {
+				sql: 'insert into hadoop_group_meta (group_name, group_description) values (?,?)',
+				values: [group_name, description],
+			}
+			connection.query(sql, function (err, results, fields) {
+				if (err) throw err;
+				callback(err, results);
+			})
+		},
+		function (results, callback) {
+			let tempParameter = [];
+			let tempValue = [];
+			user_list.map((item) => {
 				tempParameter.push('(?,?)');
 				tempValue.push(item);
 				tempValue.push(group_name);
 			})
-            let sql={
-                sql:'insert into hadoop_user_group (username,group_name) values '+tempParameter.toString(),
-                values:tempValue,
-            }
-            connection.query(sql, function (err, results, fields) {
-                if (err) throw err;
-                callback(err, results);
-            })
+			let sql = {
+				sql: 'insert into hadoop_user_group (username,group_name) values ' + tempParameter.toString(),
+				values: tempValue,
+			}
+			connection.query(sql, function (err, results, fields) {
+				if (err) throw err;
+				callback(err, results);
+			})
 			//console.log(sql)
-        },
-		function (results){
+		},
+		function (results) {
 			console.log(results);
-			res.json({type:'success'});
+			res.json({
+				type: 'success'
+			});
 		}
 
 	])
-		
-	
-	
+
+
+
 }
