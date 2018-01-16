@@ -77,15 +77,6 @@ module.exports.getData = function (req, res, next) {
 
 module.exports.deleteGroup = function (req, res, next) {
 	let group_name = req.body.groupName;
-	//let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
-	//let topic = 'picasso_cmd';
-	//let jsonMessage = JSON.stringify({
-	//	action: 'group_delete_group',
-	//	group_name: group_name,
-	//})
-	//        });
-	//mykafka.sendMessage(res, zookeeper, topic, jsonMessage);
-	//console.log(jsonMessage)
 	async.waterfall([
 		function (callback) {
 			let sql = 'delete from hadoop_user_group where group_name =' + "'" + group_name + "'";
@@ -154,7 +145,7 @@ module.exports.editUserList = function (req, res, next) {
 					callback(err, remove_list);
 				});
 			} else {
-				// callback(null, remove_list)
+				 callback(null, remove_list)
 			}
 		},
 		function (remove_list, callback) {
@@ -182,7 +173,9 @@ module.exports.editUserList = function (req, res, next) {
 			}
 		},
 	], function (err, result) {
-		console.log(err);
+		if(err===null){
+			res.json({type:'success'});
+		}
 	});
 }
 
