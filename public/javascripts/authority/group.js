@@ -5,7 +5,7 @@ let connection = mysql.createConnection({
 	host: 'rainbowdb01',
 	user: 'junjie.sheng',
 	password: 'TCDAvDol9gAczLav',
-	database: 'picasso'
+	database: 'picasso',
 });
 
 
@@ -116,8 +116,8 @@ module.exports.editUserList = function (req, res, next) {
 	let user_list_new = [];
 	let group_name = req.body.groupName;
 	user_list_new = req.body.userList;
-	let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
-	let topic = 'picasso_cmd';
+	//let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
+	//let topic = 'picasso_cmd';
 	async.waterfall([
 		function (callback) {
 			let sql = 'select * from hadoop_user_group where group_name =' + "'" + group_name + "'";
@@ -168,46 +168,110 @@ module.exports.editUserList = function (req, res, next) {
 module.exports.editDescription = function (req, res, next) {
 	let group_name = req.body.groupName;
 	let description = req.body.description
-	let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
-	let topic = 'picasso_cmd';
-	let jsonMessage = JSON.stringify({
-		action: 'group_edit_description',
-		group_name: group_name,
-		description: description,
-	});
-	mykafka.sendMessage(res, zookeeper, topic, jsonMessage);
-	console.log(jsonMessage)
+	//let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
+	//let topic = 'picasso_cmd';
+	//let jsonMessage = JSON.stringify({
+	//	action: 'group_edit_description',
+	//	group_name: group_name,
+	//	description: description,
+	//});
+	//mykafka.sendMessage(res, zookeeper, topic, jsonMessage);
+	//console.log(jsonMessage)
+	async.waterfall([
+		function (callback) {
+			let sql={
+				sql:'delete from hadoop_group_meta where group_name = ?',
+                values:[group_name],
+			}
+			connection.query(sql, function (err, results, fields) {
+				if (err) throw err;
+				callback(err, results);
+			})
+		},
+		function (results,callback) {
+            let sql={
+                sql:'insert into hadoop_group_meta (group_name, group_description) values (?,?)',
+                values:[group_name,description],
+            }
+            connection.query(sql, function (err, results, fields) {
+                if (err) throw err;
+                callback(err, results);
+            })
+        },
+		function (results){
+			console.log(results);
+			res.json({type:'success'});
+		}
+	]);
 }
 
 module.exports.addGroup = function (req, res, next) {
 	let group_name = req.body.groupName;
 	let description = req.body.description;
 	let user_list = req.body.userList;
-	let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
-	let topic = 'picasso_cmd';
-	let jsonMessage = JSON.stringify({
-		action: 'group_add_group',
-		group_name: group_name,
-	});
-	mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
-	console.log(jsonMessage);
-	jsonMessage = JSON.stringify({
-		action: 'group_edit_description',
-		group_name: group_name,
-		description: description,
-	});
-	mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
-	console.log(jsonMessage);
-	user_list.map((item, index) => {
-		jsonMessage = JSON.stringify({
-			action: 'group_add_user',
-			group_name: group_name,
-			user_name: item
-		});
-		mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
-		console.log(jsonMessage);
-	});
-	res.json({
-		type: 'success'
-	})
+	//let zookeeper = 'zk01:2181,zk02:2181,zk03:2181';
+	//let topic = 'picasso_cmd';
+	//let jsonMessage = JSON.stringify({
+	//	action: 'group_add_group',
+	//	group_name: group_name,
+	//});
+	//mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
+	//console.log(jsonMessage);
+	//jsonMessage = JSON.stringify({
+	//	action: 'group_edit_description',
+	//	group_name: group_name,
+	//	description: description,
+	//});
+	//mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
+	//console.log(jsonMessage);
+	//user_list.map((item, index) => {
+	//	jsonMessage = JSON.stringify({
+	//		action: 'group_add_user',
+	//		group_name: group_name,
+	//		user_name: item
+	//	});
+	//	mykafka.sendMessageLoop(res, zookeeper, topic, jsonMessage);
+	//	console.log(jsonMessage);
+	//});
+	//res.json({
+	//	type: 'success'
+	//})
+	 async.waterfall([
+		function (callback) {
+            let sql={
+                sql:'insert into hadoop_group_meta (group_name, group_description) values (?,?)',
+                values:[group_name,description],
+            }
+            connection.query(sql, function (err, results, fields) {
+                if (err) throw err;
+                callback(err, results);
+            })
+        },
+		function (results,callback) {
+			let tempParameter=[];
+			let tempValue=[];
+			user_list.map((item)=>{
+				tempParameter.push('(?,?)');
+				tempValue.push(item);
+				tempValue.push(group_name);
+			})
+            let sql={
+                sql:'insert into hadoop_user_group (username,group_name) values '+tempParameter.toString(),
+                values:tempValue,
+            }
+            connection.query(sql, function (err, results, fields) {
+                if (err) throw err;
+                callback(err, results);
+            })
+			//console.log(sql)
+        },
+		function (results){
+			console.log(results);
+			res.json({type:'success'});
+		}
+
+	])
+		
+	
+	
 }
