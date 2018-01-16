@@ -79,7 +79,6 @@ module.exports.deleteGroup = function (req, res, next) {
 	async.waterfall([
 		function (callback) {
 			let sql = 'delete from hadoop_user_group where group_name =' + "'" + group_name + "'";
-			console.log(sql)
 			connection.query(sql, function (err, results, fields) {
 				if (err) throw err;
 				callback(err, results);
@@ -201,7 +200,6 @@ module.exports.editDescription = function (req, res, next) {
 			})
 		},
 		function (results) {
-			console.log(results);
 			res.json({
 				type: 'success'
 			});
@@ -242,7 +240,6 @@ module.exports.addGroup = function (req, res, next) {
 			})
 		},
 		function (results) {
-			console.log(results);
 			res.json({
 				type: 'success'
 			});
