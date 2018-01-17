@@ -24,6 +24,8 @@ var allowCrossDomain = function(req, res, next) {
 
 
 var app = express();
+//前后路由连接中间件
+app.use('/', require('connect-history-api-fallback')()); 
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
