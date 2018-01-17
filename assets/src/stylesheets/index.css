@@ -45,3 +45,12 @@
     color:#337ab7;
     font-weight: bold;
 }
+.nav-big{
+    height: 50px;
+    /* line-height:60px; */
+    display: block;
+}
+.nav{
+    height: 60px;
+    line-height:60px;
+}

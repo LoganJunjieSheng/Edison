@@ -76,12 +76,12 @@ export default class Operation extends React.PureComponent {
         let valueArray = value.split('-');
         // let operation = valueArray[0];
         // let server = valueArray[1];
-        // let option = valueArray[2];
+        let option = valueArray[2];
         this.setState({
             modalId: value,
             modalShow: true,
-            modalTitle: 'Restart Zeppelin ',
-            modalBody: 'Are you sure that you want to restart the Zeppelin ?',
+            modalTitle: <div>Restart drill in <span className='strong'>{option}</span></div>,
+            modalBody: <div>Are you sure that you want to restart the Zeppelin in <span className='strong'>{option}</span> ?</div>,
             modalDo: 'Restart',
         })
     }
@@ -143,8 +143,10 @@ export default class Operation extends React.PureComponent {
 
                     <div className="page-item">
                         <div className='page-title' >Restart Zeppelin</div>
-                        <Button bsClass='btn btn-default  btn-mr20' bsSize="large" value='restart-Zeppelin-restart'
-                            onClick={(e) => this.showModalZeppelin(e)}>RESTART</Button>
+                        <Button bsClass='btn btn-default  btn-mr20' bsSize="large" value='restart-Zeppelin-china'
+                            onClick={(e) => this.showModalZeppelin(e)}>CHINA</Button>
+                        <Button bsClass='btn btn-default  btn-mr20' bsSize="large" value='restart-Zeppelin-usa'
+                            onClick={(e) => this.showModalZeppelin(e)}>USA</Button>
                     </div>
 
                     <ModalPop
