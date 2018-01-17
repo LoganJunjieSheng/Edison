@@ -22,15 +22,15 @@ class App extends React.PureComponent {
                     <Navbar >
                         <Navbar.Header>
                             <Navbar.Brand>
-                                <NavLink to="/">Edison</NavLink>
+                                <NavLink className='nav-big' to="/">Edison</NavLink>
                             </Navbar.Brand>
                             <Navbar.Toggle />
                         </Navbar.Header>
                         <Navbar.Collapse>
                             <Nav>
-                                <NavItem><NavLink tag={Link}to="/operation">Operation and maintenance tools</NavLink></NavItem>
-                                <NavItem><NavLink tag={Link} to="/authority">Authority management</NavLink></NavItem>
-                                <NavItem><NavLink tag={Link} to="/alarm">Data monitoring and alarm</NavLink></NavItem>
+                                <NavItem className='nav'><NavLink className='nav-big' tag={Link}to="/operation">Operation and maintenance tools</NavLink></NavItem>
+                                <NavItem className='nav'><NavLink className='nav-big' tag={Link} to="/authority">Authority management</NavLink></NavItem>
+                                <NavItem className='nav'><NavLink className='nav-big' tag={Link} to="/alarm">Data monitoring and alarm</NavLink></NavItem>
                             </Nav>
                         </Navbar.Collapse>
                     </Navbar>
