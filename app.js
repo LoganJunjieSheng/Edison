@@ -3,17 +3,10 @@ var path = require('path');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var index = require('./routes/index');
-// var users = require('./routes/users');
-// var restart=require('./routes/restart');
-
-//operation and maintenance tools
 var operationAndMaintenanceTools=require('./routes/operationAndMaintenanceTools');
-//data monitoring and alarm
 var dataMonitoringAndAlarm=require('./routes/dataMonitoringAndAlarm');
 var authority=require('./routes/authority')
-
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
@@ -21,31 +14,32 @@ var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Credentials','true');
     next();
 };
-
-
 var app = express();
+var expressSession = require('express-session');
+var passport = require('./public/javascripts/passport_config.js');
 //前后路由连接中间件
 app.use('/', require('connect-history-api-fallback')()); 
-
-// view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
-
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(require('express-session')({ secret: 'keyboard cat', resave: false, saveUninitialized: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'assets/build')));
 //app.listen('192.168.1.48');
-
 app.use(allowCrossDomain);
-
+app.use(expressSession({
+	secret: 'cheneyxu',
+	resave: false,
+	saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', index);
-// app.use('/users', users);
-// app.use('/restart',restart);
 app.use('/dataMonitoringAndAlarm',dataMonitoringAndAlarm);
 app.use('/operationAndMaintenanceTools',operationAndMaintenanceTools);
 app.use('/authority',authority)
