@@ -34,7 +34,7 @@ export default class ModalPop extends React.PureComponent {
                 </FormGroup>
                 <ButtonToolbar>
                     <Button bsStyle="primary" bsSize="large" onClick={this.props.login}>Login</Button>
-                    <Button bsSize="large" onClick={this.changeType} >Regist</Button>
+                    <Button bsSize="large" onClick={this.props.jwt} >Regist</Button>
                 </ButtonToolbar>
             </Panel>
         )

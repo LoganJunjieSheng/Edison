@@ -10,8 +10,9 @@ export default class Index extends React.PureComponent {
         super(props);
         this.state = {
             login: {
-                username: '',
-                password: '',
+                username: 'sjj',
+                password: 'sjj',
+                token: ''
             },
 
         }
@@ -26,24 +27,55 @@ export default class Index extends React.PureComponent {
         login.password = e.target.value;
         this.setState({ login })
     }
-    login = () => { 
+    login = () => {
         fetch('http://bigdata-view.cootekservice.com:50056/test', {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                // 'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ…c4OH0.ZKYS2xj5C4-l2k1ppyG8JnyZwvWLMNb2yWshM1XsNxA',
+                'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 username: this.state.login.username,
-                password: this.state.login.password
+                password: this.state.login.password,
             })
         })
-            .then(res => { console.log(res) })
-
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+                // let login = Object.assign({}, this.state.login);
+                // login.token = json.token;
+                // this.setState({ login: login })
+                localStorage.Edison_token = json.token;
+            })
     }
+    jwt = () => {
+        fetch('http://bigdata-view.cootekservice.com:50056/jwt', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Authorization': 'bearer ' + localStorage.Edison_token,
+                // 'Authorization': 'bearer ' + this.state.login.token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: this.props.token
+            })
+        })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+            })
+    }
+    clearLocalStorage = () => {
+        localStorage.removeItem('Edison_token');
+    }
+
+
     render() {
         return (
             <div>
+
                 <Col xsHidden smHidden md={12}><div className="placeholder-h30"></div></Col>
                 <Col xsHidden smHidden md={3}></Col>
                 <Col xs={12} md={6}>
@@ -54,8 +86,10 @@ export default class Index extends React.PureComponent {
                         handleLoginUsername={this.handleLoginUsername}
                         handleLoginPassword={this.handleLoginPassword}
                         login={this.login}
+                        jwt={this.jwt}
                     >
                     </Login>
+                    <button onClick={this.clearLocalStorage}>Clear localStorage</button>
                 </Col>
                 <Col xsHidden smHidden md={3}></Col>
             </div>
