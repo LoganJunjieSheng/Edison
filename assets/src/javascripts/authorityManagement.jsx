@@ -125,6 +125,7 @@ export default class Authority extends React.PureComponent {
                     // optionsGroup: json.groupName,
                 })
             })
+            .catch(ex => { console.log(ex) })
     }
 
     redirectToUser = () => {
@@ -138,10 +139,10 @@ export default class Authority extends React.PureComponent {
             body: JSON.stringify({})
 
         })
-            .then(res => { if (res.status === 200) { res.json() } })
+            .then(res => res.json())
             .then(json => {
-                if(json===undefined){return}
                 console.log(json)
+                if (json === undefined) { return }
                 let optionsGroup = [];
                 json.groupName.map((item, index) => {
                     optionsGroup.push({
@@ -156,6 +157,7 @@ export default class Authority extends React.PureComponent {
                     optionsGroup: optionsGroup,
                 })
             })
+            .catch(ex => { console.log(ex) })
 
 
     }
