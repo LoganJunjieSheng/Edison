@@ -11,13 +11,14 @@ export default class Index extends React.PureComponent {
         this.state = {
             islogin: false,
             login: {
-                username: 'sjj',
-                password: 'sjj',
+                username: '',
+                password: '',
                 token: ''
             },
 
         }
     }
+   
     handleLoginUsername = (e) => {
         let login = Object.assign({}, this.state.login);
         login.username = e.target.value;
@@ -33,7 +34,6 @@ export default class Index extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                // 'Authorization':'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZ…c4OH0.ZKYS2xj5C4-l2k1ppyG8JnyZwvWLMNb2yWshM1XsNxA',
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -57,7 +57,6 @@ export default class Index extends React.PureComponent {
             mode: "cors",
             headers: {
                 'Authorization': 'bearer ' + localStorage.Edison_token,
-                // 'Authorization': 'bearer ' + this.state.login.token,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
@@ -71,7 +70,6 @@ export default class Index extends React.PureComponent {
     }
     signout = () => {
         localStorage.removeItem('Edison_token');
-        this.setState({ islogin: false })
         console.log(localStorage.Edison_token)
     }
 
