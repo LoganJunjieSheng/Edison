@@ -1,15 +1,24 @@
 import React from 'react';
 import { Modal, Button, FormControl, Panel, FormGroup, InputGroup, ButtonToolbar } from 'react-bootstrap';
 import LoadingButton from '../components/loadingButton'
-
+import {
+    BrowserRouter as Router,
+    Route,
+    Redirect,
+} from 'react-router-dom'
 export default class ModalPop extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            type: 'login'
+            type: 'login',
+            Edison_token: localStorage.Edison_token,
         }
     }
-   
+    signout=()=>{
+        this.props.signout()
+        this.setState({Edison_token: localStorage.Edison_token})
+    }
+
     changeType = () => {
         if (this.state.type === 'login') {
             this.setState({ type: 'regist' });
@@ -29,13 +38,18 @@ export default class ModalPop extends React.PureComponent {
                 <FormGroup>
                     <InputGroup>
                         <InputGroup.Addon>Password</InputGroup.Addon>
-                        <FormControl type="text" value={this.props.loginPassword} onChange={this.props.handleLoginPassword} />
+                        <FormControl type="password" value={this.props.loginPassword} onChange={this.props.handleLoginPassword} />
                     </InputGroup>
                 </FormGroup>
                 <ButtonToolbar>
-                    <Button bsStyle="primary" bsSize="large" onClick={this.props.login}>Login</Button>
-                    <Button bsSize="large" onClick={this.props.jwt} >Regist</Button>
+                    <Button bsStyle={!(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.props.login}>Login</Button>
+                    <Button bsStyle={(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.signout}>Sign out</Button>
+                    <Button onClick={this.props.jwt} >Regist</Button>
                 </ButtonToolbar>
+                {this.props.islogin
+                    ? <Redirect to="/authority" />
+                    : false}
+
             </Panel>
         )
         let regist = (

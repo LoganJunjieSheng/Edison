@@ -97,7 +97,8 @@ export default class Operation extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
             body: JSON.stringify({
                 operation: operation,

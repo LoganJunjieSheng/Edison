@@ -9,6 +9,7 @@ export default class Index extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
+            islogin: false,
             login: {
                 username: 'sjj',
                 password: 'sjj',
@@ -45,8 +46,9 @@ export default class Index extends React.PureComponent {
                 console.log(json)
                 // let login = Object.assign({}, this.state.login);
                 // login.token = json.token;
-                // this.setState({ login: login })
+                 
                 localStorage.Edison_token = json.token;
+                this.setState({ islogin: true })
             })
     }
     jwt = () => {
@@ -67,8 +69,10 @@ export default class Index extends React.PureComponent {
                 console.log(json)
             })
     }
-    clearLocalStorage = () => {
+    signout = () => {
         localStorage.removeItem('Edison_token');
+        this.setState({ islogin: false })
+        console.log(localStorage.Edison_token)
     }
 
 
@@ -80,16 +84,18 @@ export default class Index extends React.PureComponent {
                 <Col xsHidden smHidden md={3}></Col>
                 <Col xs={12} md={6}>
                     <Login
+                        islogin={this.state.islogin}
                         loginUsername={this.state.login.username}
                         loginPassword={this.state.login.password}
 
                         handleLoginUsername={this.handleLoginUsername}
                         handleLoginPassword={this.handleLoginPassword}
                         login={this.login}
+                        signout={this.signout}
                         jwt={this.jwt}
                     >
                     </Login>
-                    <button onClick={this.clearLocalStorage}>Clear localStorage</button>
+
                 </Col>
                 <Col xsHidden smHidden md={3}></Col>
             </div>
