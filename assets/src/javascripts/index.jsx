@@ -1,10 +1,9 @@
 import React from 'react';
 import { Col } from 'react-bootstrap';
 import fetch from 'node-fetch';
-
 import Login from './components/login'
 import '../stylesheets/index.css'
-
+// md5 = require('js-md5');
 export default class Index extends React.PureComponent {
     constructor(props) {
         super(props);
@@ -18,7 +17,7 @@ export default class Index extends React.PureComponent {
 
         }
     }
-   
+
     handleLoginUsername = (e) => {
         let login = Object.assign({}, this.state.login);
         login.username = e.target.value;
@@ -30,6 +29,8 @@ export default class Index extends React.PureComponent {
         this.setState({ login })
     }
     login = () => {
+        var md5 = require('md5');
+        console.log(md5('sjj'));
         fetch('http://bigdata-view.cootekservice.com:50056/test', {
             method: "POST",
             mode: "cors",
@@ -38,7 +39,7 @@ export default class Index extends React.PureComponent {
             },
             body: JSON.stringify({
                 username: this.state.login.username,
-                password: this.state.login.password,
+                password: md5(this.state.login.password),
             })
         })
             .then(res => res.json())
@@ -46,7 +47,7 @@ export default class Index extends React.PureComponent {
                 console.log(json)
                 // let login = Object.assign({}, this.state.login);
                 // login.token = json.token;
-                 
+
                 localStorage.Edison_token = json.token;
                 this.setState({ islogin: true })
             })
