@@ -62,13 +62,21 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
-            body: JSON.stringify({})
+            body: JSON.stringify({
+
+            })
         })
-            .then(res => res.json())
+            .then(res => {
+                if (res.status === 200) {
+                    return res.json()
+                }
+            })
             .then(json => {
+                if (json === undefined) { return }
                 console.log(json)
                 let optionsUser = [];
                 json.userName.map((item, index) => {
@@ -91,7 +99,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
             body: JSON.stringify({})
 
@@ -123,13 +132,15 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
             body: JSON.stringify({})
 
         })
-            .then(res => res.json())
+            .then(res => { if (res.status === 200) { res.json() } })
             .then(json => {
+                if(json===undefined){return}
                 console.log(json)
                 let optionsGroup = [];
                 json.groupName.map((item, index) => {
@@ -152,7 +163,7 @@ export default class Authority extends React.PureComponent {
         if (this.state.userOrGroup === 'group') {
             return (
                 <ButtonToolbar>
-                    <Button  onClick={this.redirectToUser} >User</Button>
+                    <Button onClick={this.redirectToUser} >User</Button>
                     <Button bsStyle="primary" disabled  >Group</Button>
                 </ButtonToolbar>
             );
@@ -160,7 +171,7 @@ export default class Authority extends React.PureComponent {
             return (
                 <ButtonToolbar>
                     <Button bsStyle="primary" disabled  >User</Button>
-                    <Button  onClick={this.redirectToGroup} >Group</Button>
+                    <Button onClick={this.redirectToGroup} >Group</Button>
                 </ButtonToolbar>
             );
         }
@@ -193,7 +204,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
             body: JSON.stringify({
@@ -230,7 +242,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
             body: JSON.stringify({
@@ -282,7 +295,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
             body: JSON.stringify({
@@ -354,7 +368,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
             body: JSON.stringify({
@@ -416,7 +431,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
             body: JSON.stringify({
@@ -467,7 +483,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
             body: JSON.stringify({
@@ -535,7 +552,8 @@ export default class Authority extends React.PureComponent {
             method: "POST",
             mode: "cors",
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'bearer ' + localStorage.Edison_token,
             },
 
             body: JSON.stringify({
