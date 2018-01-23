@@ -14,6 +14,26 @@ export default class ModalPop extends React.PureComponent {
             Edison_token: localStorage.Edison_token,
         }
     }
+    componentDidMount() {
+        fetch('http://bigdata-view.cootekservice.com:50056/jwt', {
+            method: "POST",
+            mode: "cors",
+            headers: {
+                'Authorization': 'bearer ' + localStorage.Edison_token,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                token: this.props.token
+            })
+        })
+            .then(res => res.json())
+            .then(json => {
+                console.log(json)
+            })
+            .catch(ex=>{
+                localStorage.removeItem('Edison_token');})
+                this.setState({Edison_token: localStorage.Edison_token})
+    }
     signout=()=>{
         this.props.signout()
         this.setState({Edison_token: localStorage.Edison_token})
@@ -42,9 +62,9 @@ export default class ModalPop extends React.PureComponent {
                     </InputGroup>
                 </FormGroup>
                 <ButtonToolbar>
-                    <Button bsStyle={!(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.props.login}>Login</Button>
+                    <Button bsStyle={!(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.props.login} disable>Login</Button>
                     <Button bsStyle={(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.signout}>Sign out</Button>
-                    <Button onClick={this.props.jwt} >Regist</Button>
+                    {/* <Button onClick={this.props.jwt} >Regist</Button> */}
                 </ButtonToolbar>
                 {this.props.islogin
                     ? <Redirect to="/authority" />
