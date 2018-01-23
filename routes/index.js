@@ -13,7 +13,7 @@ router.get('/', function (req, res, next) {
 router.post('/test', passport.authenticate('local'), function(req, res) {
 	res.json({
 		type:"success",
-		token:jwt.sign({username:req.user.username},'sjj')
+		token:jwt.sign({username:req.user.username},'sjj',{expiresIn:60})
 	});
 });
 

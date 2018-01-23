@@ -69,6 +69,7 @@ module.exports.getData = function (req, res, next) {
 				//'userName':userName,
 				'userList': userList,
 			})
+			//console.log(res)
 		}
 	]);
 };
