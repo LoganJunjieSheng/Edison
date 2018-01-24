@@ -225,6 +225,7 @@ module.exports.addGroup = function (req, res, next) {
 		function (results, callback) {
 			let tempParameter = [];
 			let tempValue = [];
+			if(user_list.length!==0){
 			user_list.map((item) => {
 				tempParameter.push('(?,?)');
 				tempValue.push(item);
@@ -238,6 +239,7 @@ module.exports.addGroup = function (req, res, next) {
 				if (err) throw err;
 				callback(err, results);
 			})
+			}else{console.log(123);callback(null,null)}
 		},
 		function (results) {
 			res.json({
