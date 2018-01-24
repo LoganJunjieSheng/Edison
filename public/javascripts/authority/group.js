@@ -239,7 +239,7 @@ module.exports.addGroup = function (req, res, next) {
 				if (err) throw err;
 				callback(err, results);
 			})
-			}else{console.log(123);callback(null,null)}
+			}else{callback(null,null)}
 		},
 		function (results) {
 			res.json({

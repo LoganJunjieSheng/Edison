@@ -174,6 +174,7 @@ module.exports.addUser = function (req, res, next) {
 		function (callback) {
 			let tempParameter = [];
 			let tempValue = [];
+			if(group_list.length!==0){
 			group_list.map((item) => {
 				tempParameter.push('(?,?)');
 				tempValue.push(user_name);
@@ -187,6 +188,7 @@ module.exports.addUser = function (req, res, next) {
 				if (err) throw err;
 				callback(err, results);
 			})
+			}else{callback(null,null)}
 		},
 		function (results) {
 			res.json({
