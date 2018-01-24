@@ -16,6 +16,8 @@ router.post('/test', passport.authenticate('local'), function(req, res) {
 });
 
 router.post('/jwt', passport.authenticate('jwt'), function(req, res) {
+	let token=req.headers.authorization.slice(7)
+	console.log(jwt.decode(token).username)
     res.json({
         type:"success",
     });
