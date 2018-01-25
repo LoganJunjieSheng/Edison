@@ -742,9 +742,11 @@ export default class Alarm extends React.PureComponent {
                 'Authorization': 'bearer ' + localStorage.Edison_token,
             },
             body: JSON.stringify({
+                action:'monitor',
                 type: id.type,
                 status: id.status,
-                description: this.state.ackDescription,
+                description_new: this.state.ackDescription,
+                description_old:id.description,
             })
         })
             .then(res => res.json())
