@@ -1,15 +1,13 @@
 module.exports.handleKafka = function (req, res, next) {
-    let type = req.param('type');
-    let status = req.param('status');
-    let description = req.param('description');
-    
+    let type = req.body.type;
+    let status = req.body.status;
+    let description = req.body.description;
     let kafka = require('kafka-node');
     let Producer = kafka.Producer;
     let KeyedMessage = kafka.KeyedMessage;
     let client = new kafka.Client('localhost:2181');//zookeeper address
     let producer = new Producer(client);
     let km = new KeyedMessage("key", "message");
-
     let myDate = new Date()
 
     let tempMessage={
@@ -23,11 +21,8 @@ module.exports.handleKafka = function (req, res, next) {
         topic: 'alarmAck',
         messages: [jsonMessage],
     }];
-
     producer.on('ready', function () {
-        console.log('connect kafka')
         producer.send(payloads, function (err, data) {
-            console.log(data);
         });
     })
     producer.on('error', function (err) {
