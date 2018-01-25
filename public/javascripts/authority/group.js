@@ -24,7 +24,7 @@ module.exports.getData = function (req, res, next) {
 	let userName = []; //users数组
 	let groupList = []; //[{group:,description:,userList:[]}]
 	async.waterfall([
-//读数据库
+		//读数据库
 		function (callback) {
 			let sql = 'select * from hadoop_group_meta;';
 			connection.query(sql, function (err, results, fields) {
@@ -44,8 +44,8 @@ module.exports.getData = function (req, res, next) {
 			hadoop_user_group = results;
 			callback(null)
 		},
-//提取group,user数组,去重
-//构造每个group对应的description,user_list,user_number
+		//提取group,user数组,去重
+		//构造每个group对应的description,user_list,user_number
 		function () {
 			hadoop_group_meta.map((item, index) => {
 				groupName.push(item.group_name);
@@ -86,9 +86,9 @@ module.exports.getData = function (req, res, next) {
 };
 //删除指定的GROUP，同时删除GROUP对应的user_list
 module.exports.deleteGroup = function (req, res, next) {
-	let group_name = req.body.groupName;//GROUP的group_name
+	let group_name = req.body.groupName; //GROUP的group_name
 	async.waterfall([
-//删除两个表中的GROUP对应的数据
+		//删除两个表中的GROUP对应的数据
 		function (callback) {
 			let sql = 'delete from hadoop_user_group where group_name =' + "'" + group_name + "'";
 			connection.query(sql, function (err, results, fields) {
@@ -112,12 +112,12 @@ module.exports.deleteGroup = function (req, res, next) {
 }
 //更新GROUP
 module.exports.editUserList = function (req, res, next) {
-	let group_name = req.body.groupName;//GROUP的group_name
-	let user_list_old = [];//GROUP原来包含的userlist
-	let user_list_new = [];//GROUP要被更新的userlist
+	let group_name = req.body.groupName; //GROUP的group_name
+	let user_list_old = []; //GROUP原来包含的userlist
+	let user_list_new = []; //GROUP要被更新的userlist
 	user_list_new = req.body.userList;
 	async.waterfall([
-//读取groupname与user的映射关系
+		//读取groupname与user的映射关系
 		function (callback) {
 			let sql = 'select * from hadoop_user_group where group_name =' + "'" + group_name + "'";
 			connection.query(sql, function (err, results, fields) {
@@ -126,20 +126,20 @@ module.exports.editUserList = function (req, res, next) {
 			})
 		},
 		function (results, callback) {
-//构造出user_list_old
+			//构造出user_list_old
 			results.map((item) => {
 				user_list_old.push(item.username);
 			});
-//对user_list_old user_list_new 做对比，找出user_list_new相对于user_list_old增加的user与被删除的user
+			//对user_list_old user_list_new 做对比，找出user_list_new相对于user_list_old增加的user与被删除的user
 			let old_set = new Set(user_list_old);
 			let new_set = new Set(user_list_new);
 			let remove_set = new Set([...old_set].filter(x => !new_set.has(x)));
 			let add_set = new Set([...new_set].filter(x => !old_set.has(x)));
-			let remove_list = [...remove_set];//被删除的user
-			let add_list = [...add_set];//新增的user
+			let remove_list = [...remove_set]; //被删除的user
+			let add_list = [...add_set]; //新增的user
 			let tempParameter = [];
 			let tempValue = [];
-//根据remove_list add_list更新 hadoop_user_group
+			//根据remove_list add_list更新 hadoop_user_group
 			if (add_list.length !== 0) {
 				add_list.map((item) => {
 					tempParameter.push('(?,?)');
@@ -191,9 +191,9 @@ module.exports.editUserList = function (req, res, next) {
 }
 //更新description
 module.exports.editDescription = function (req, res, next) {
-	let group_name = req.body.groupName;//GROUP的group_name
-	let description = req.body.description//GROUP的group_descirption
-//更新数据库
+	let group_name = req.body.groupName; //GROUP的group_name
+	let description = req.body.description //GROUP的group_descirption
+	//更新数据库
 	async.waterfall([
 		function (callback) {
 			let sql = {
@@ -241,21 +241,23 @@ module.exports.addGroup = function (req, res, next) {
 		function (results, callback) {
 			let tempParameter = [];
 			let tempValue = [];
-			if(user_list.length!==0){
-			user_list.map((item) => {
-				tempParameter.push('(?,?)');
-				tempValue.push(item);
-				tempValue.push(group_name);
-			})
-			let sql = {
-				sql: 'insert into hadoop_user_group (username,group_name) values ' + tempParameter.toString(),
-				values: tempValue,
+			if (user_list.length !== 0) {
+				user_list.map((item) => {
+					tempParameter.push('(?,?)');
+					tempValue.push(item);
+					tempValue.push(group_name);
+				})
+				let sql = {
+					sql: 'insert into hadoop_user_group (username,group_name) values ' + tempParameter.toString(),
+					values: tempValue,
+				}
+				connection.query(sql, function (err, results, fields) {
+					if (err) throw err;
+					callback(err, results);
+				})
+			} else {
+				callback(null, null)
 			}
-			connection.query(sql, function (err, results, fields) {
-				if (err) throw err;
-				callback(err, results);
-			})
-			}else{callback(null,null)}
 		},
 		function (results) {
 			res.json({
