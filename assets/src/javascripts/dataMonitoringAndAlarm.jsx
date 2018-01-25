@@ -44,7 +44,7 @@ export default class Alarm extends React.PureComponent {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'bearer ' + localStorage.Edison_token,
-                
+
             },
             body: JSON.stringify({
                 activePage: 1
@@ -742,18 +742,46 @@ export default class Alarm extends React.PureComponent {
                 'Authorization': 'bearer ' + localStorage.Edison_token,
             },
             body: JSON.stringify({
-                action:'monitor',
+                action: 'monitor',
                 type: id.type,
                 status: id.status,
                 description_new: this.state.ackDescription,
-                description_old:id.description,
+                description_old: id.description,
             })
         })
-            .then(res => res.json())
-            .then(json => console.log(json));
+            .then(res => {
+                fetch('http://bigdata-view.cootekservice.com:50056/dataMonitoringAndAlarm/alarmList', {
+                    method: "POST",
+                    mode: "cors",
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'bearer ' + localStorage.Edison_token,
 
-        console.log(id);
-        console.log(this.state.ackDescription)
+                    },
+                    body: JSON.stringify({
+                        activePage: 1
+                    })
+                })
+                    .then(res => res.json())
+                    .then(json => {
+                        let temp = [];
+                        json.alermList.map((item, index) => {
+                            temp.push(item);
+                            if (temp[index].status) {
+                                temp[index].checked = true;
+                            } else {
+                                temp[index].checked = false;
+                            }
+
+                            temp[index].ratioList = [];
+                        })
+
+                        this.setState({
+                            dataList: temp,
+                            pages: json.pages,
+                        })
+                    });
+            })
     }
     handleAckDescription = (e) => {
         this.setState({
