@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, FormControl, Panel, FormGroup, InputGroup, ButtonToolbar } from 'react-bootstrap';
+import { Modal, Button, FormControl, Panel, FormGroup, InputGroup, ButtonToolbar, OverlayTrigger, Popover } from 'react-bootstrap';
 import LoadingButton from '../components/loadingButton'
 import {
     BrowserRouter as Router,
@@ -30,13 +30,14 @@ export default class ModalPop extends React.PureComponent {
             .then(json => {
                 console.log(json)
             })
-            .catch(ex=>{
-                localStorage.removeItem('Edison_token');})
-                this.setState({Edison_token: localStorage.Edison_token})
+            .catch(ex => {
+                localStorage.removeItem('Edison_token');
+            })
+        this.setState({ Edison_token: localStorage.Edison_token })
     }
-    signout=()=>{
+    signout = () => {
         this.props.signout()
-        this.setState({Edison_token: localStorage.Edison_token})
+        this.setState({ Edison_token: localStorage.Edison_token })
     }
 
     changeType = () => {
@@ -47,6 +48,12 @@ export default class ModalPop extends React.PureComponent {
         }
     }
     render() {
+        const popoverLeft = (
+            <Popover  title="error">
+                登录失败，请重新输入
+            </Popover>
+        );
+
         let login = (
             <Panel header="Login">
                 <FormGroup>
@@ -62,7 +69,9 @@ export default class ModalPop extends React.PureComponent {
                     </InputGroup>
                 </FormGroup>
                 <ButtonToolbar>
-                    <Button bsStyle={!(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.props.login} disable>Login</Button>
+                    <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverLeft}>
+                        <Button bsStyle={!(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.props.login} disable>Login</Button>
+                    </OverlayTrigger>
                     <Button bsStyle={(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.signout}>Sign out</Button>
                     {/* <Button onClick={this.props.jwt} >Regist</Button> */}
                 </ButtonToolbar>

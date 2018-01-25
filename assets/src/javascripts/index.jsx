@@ -3,16 +3,17 @@ import { Col } from 'react-bootstrap';
 import fetch from 'node-fetch';
 import Login from './components/login'
 import '../stylesheets/index.css'
+import { log } from 'util';
 // md5 = require('js-md5');
 export default class Index extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
             islogin: false,
+            defeat_login: false,
             login: {
                 username: '',
                 password: '',
-                token: ''
             },
 
         }
@@ -30,7 +31,6 @@ export default class Index extends React.PureComponent {
     }
     login = () => {
         var md5 = require('md5');
-        console.log(md5('sjj'));
         fetch('http://bigdata-view.cootekservice.com:50056/test', {
             method: "POST",
             mode: "cors",
@@ -44,31 +44,36 @@ export default class Index extends React.PureComponent {
         })
             .then(res => res.json())
             .then(json => {
-                console.log(json)
-                // let login = Object.assign({}, this.state.login);
-                // login.token = json.token;
-
                 localStorage.Edison_token = json.token;
                 this.setState({ islogin: true })
             })
-    }
-    jwt = () => {
-        fetch('http://bigdata-view.cootekservice.com:50056/jwt', {
-            method: "POST",
-            mode: "cors",
-            headers: {
-                'Authorization': 'bearer ' + localStorage.Edison_token,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                token: this.props.token
-            })
-        })
-            .then(res => res.json())
-            .then(json => {
-                console.log(json)
+            .catch(ex => {
+                let login = Object.assign({}, this.state.login);
+                login.username = '';
+                login.password = '';
+                this.setState({
+                    login: login,
+                    defeat_login: true
+                })
             })
     }
+    // jwt = () => {
+    //     fetch('http://bigdata-view.cootekservice.com:50056/jwt', {
+    //         method: "POST",
+    //         mode: "cors",
+    //         headers: {
+    //             'Authorization': 'bearer ' + localStorage.Edison_token,
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify({
+    //             token: this.props.token
+    //         })
+    //     })
+    //         .then(res => res.json())
+    //         .then(json => {
+    //             console.log(json)
+    //         })
+    // }
     signout = () => {
         localStorage.removeItem('Edison_token');
         console.log(localStorage.Edison_token)
@@ -91,7 +96,7 @@ export default class Index extends React.PureComponent {
                         handleLoginPassword={this.handleLoginPassword}
                         login={this.login}
                         signout={this.signout}
-                        jwt={this.jwt}
+                    // jwt={this.jwt}
                     >
                     </Login>
 
