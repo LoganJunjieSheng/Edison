@@ -268,3 +268,17 @@ groupList: audio_clock_dw_retention
 2018-01-25T02:59:34.593Z info:  删除了一个user
 username: sjj
 userName: test
+2018-01-25T03:26:33.346Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-25T03:27:21.379Z info: ack一个报警
+username: sjj
+type: compress_cn
+description: ok
+2018-01-25T03:30:52.202Z info: ack一个报警
+username: sjj
+type: compress_cn
+description: ok
+2018-01-25T03:31:51.945Z info: ack一个报警
+username: sjj
+type: compress_cn
+description: ok

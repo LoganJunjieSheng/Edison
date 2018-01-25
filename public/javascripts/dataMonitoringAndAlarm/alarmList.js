@@ -8,7 +8,7 @@ module.exports.getAlarmList = function (req, res, next) {
 		database: 'monitor'
 	});
 	let sql = 'select * from alert order by status desc;';
-	let activePage = req.param('activePage');
+	let activePage = req.body.activePage;
 	let alermList = [];
 	let pages = 0;
 	//使用async进行流程控制，nodejs是异步非阻塞，读取mysql时，会执行后面的语句。
