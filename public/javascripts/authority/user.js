@@ -46,7 +46,7 @@ module.exports.getData = function (req, res, next) {
 			hadoop_group_meta.map((item, index) => {
 				groupName.push(item.group_name);
 			});
-//去重
+			//去重
 			let hash = {};
 			hadoop_user_group.map((item, index) => {
 				if (!hash[item.username]) {
@@ -55,7 +55,7 @@ module.exports.getData = function (req, res, next) {
 				}
 			})
 			hash = null;
-//构造user_list
+			//构造user_list
 			let groupMapUser = hadoop_user_group.slice(0);
 			userName.map((item, index) => {
 				let groupList = [];
@@ -117,7 +117,7 @@ module.exports.editGroupList = function (req, res, next) {
 			results.map((item) => {
 				group_list_old.push(item.group_name);
 			})
-//找出group_list中新增的group与被删除的group
+			//找出group_list中新增的group与被删除的group
 			let old_set = new Set(group_list_old);
 			let new_set = new Set(group_list_new);
 			let remove_set = new Set([...old_set].filter(x => !new_set.has(x)));
@@ -142,7 +142,7 @@ module.exports.editGroupList = function (req, res, next) {
 				});
 			} else {
 				callback(null, remove_list)
-			}	
+			}
 		},
 		function (remove_list, callback) {
 			if (remove_list.length !== 0) {
@@ -183,21 +183,23 @@ module.exports.addUser = function (req, res, next) {
 		function (callback) {
 			let tempParameter = [];
 			let tempValue = [];
-			if(group_list.length!==0){
-			group_list.map((item) => {
-				tempParameter.push('(?,?)');
-				tempValue.push(user_name);
-				tempValue.push(item);
-			})
-			let sql = {
-				sql: 'insert into hadoop_user_group (username,group_name) values ' + tempParameter.toString(),
-				values: tempValue,
+			if (group_list.length !== 0) {
+				group_list.map((item) => {
+					tempParameter.push('(?,?)');
+					tempValue.push(user_name);
+					tempValue.push(item);
+				})
+				let sql = {
+					sql: 'insert into hadoop_user_group (username,group_name) values ' + tempParameter.toString(),
+					values: tempValue,
+				}
+				connection.query(sql, function (err, results, fields) {
+					if (err) throw err;
+					callback(err, results);
+				})
+			} else {
+				callback(null, null)
 			}
-			connection.query(sql, function (err, results, fields) {
-				if (err) throw err;
-				callback(err, results);
-			})
-			}else{callback(null,null)}
 		},
 		function (results) {
 			res.json({
