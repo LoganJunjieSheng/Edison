@@ -21,8 +21,9 @@ module.exports.getAlarmList = function (req, res, next) {
 			})
 		},
 		function (RESULTS, callback) {
-			alermList = RESULTS.slice((activePage - 1) * 10, activePage * 10);
-			pages = Math.ceil(RESULTS.length / 10);
+			alermList = RESULTS.slice((activePage - 1) * 10, activePage * 10);//根据不同的页数返回指定的数据
+			pages = Math.ceil(RESULTS.length / 10);//总页数
+//通过data_type_map找出那些data_type有同环比数据，同时构造拥有同环比数据的data_type与table的映射关系
 			let sqlList = {};
 			alermList.map((item, index) => {
 				let key = 'key' + index;

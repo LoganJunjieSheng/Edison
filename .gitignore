@@ -3,4 +3,4 @@ node_modules
 .npm-debug.log
 logs/error.log
 logs/warn.log
-log/info/log
+logs/info/log

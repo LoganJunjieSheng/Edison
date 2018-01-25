@@ -8,12 +8,20 @@ let connection = mysql.createConnection({
 	database: 'picasso'
 });
 
+//group 和 user 之间的关系包含在两个表中
+//  hadoop_group_meta
+//  group_name group_description
+//
+//  hadoop_user_group
+//  group_name user_name
+
+//构造userList [{user_name:'',group_number:'',group_list:[]}]
 module.exports.getData = function (req, res, next) {
 	let hadoop_group_meta = [];
 	let hadoop_user_group = [];
 	let groupName = []; //group数组
 	let userName = []; //users数组
-	let userList = []; //[{user:'',userNumber:num,userList:[]}]
+	let userList = []; //[{user_name:'',group_number:'',group_list:[]}]
 	async.waterfall([
 		function (callback) {
 			let sql = 'select * from hadoop_group_meta;';
@@ -38,6 +46,7 @@ module.exports.getData = function (req, res, next) {
 			hadoop_group_meta.map((item, index) => {
 				groupName.push(item.group_name);
 			});
+//去重
 			let hash = {};
 			hadoop_user_group.map((item, index) => {
 				if (!hash[item.username]) {
@@ -46,6 +55,7 @@ module.exports.getData = function (req, res, next) {
 				}
 			})
 			hash = null;
+//构造user_list
 			let groupMapUser = hadoop_user_group.slice(0);
 			userName.map((item, index) => {
 				let groupList = [];
@@ -54,7 +64,6 @@ module.exports.getData = function (req, res, next) {
 						groupList.push(item1.group_name);
 					}
 				})
-				//let description='';
 				userList.push({
 					type: 'user',
 					user: item,
@@ -69,11 +78,10 @@ module.exports.getData = function (req, res, next) {
 				//'userName':userName,
 				'userList': userList,
 			})
-			//console.log(res)
 		}
 	]);
 };
-
+//删除指定user
 module.exports.deleteUser = function (req, res, next) {
 	let user_name = req.body.userName;
 	async.waterfall([
@@ -91,7 +99,7 @@ module.exports.deleteUser = function (req, res, next) {
 		}
 	]);
 }
-
+//更新user中的group_list
 module.exports.editGroupList = function (req, res, next) {
 	let group_list_old = [];
 	let group_list_new = [];
@@ -109,6 +117,7 @@ module.exports.editGroupList = function (req, res, next) {
 			results.map((item) => {
 				group_list_old.push(item.group_name);
 			})
+//找出group_list中新增的group与被删除的group
 			let old_set = new Set(group_list_old);
 			let new_set = new Set(group_list_new);
 			let remove_set = new Set([...old_set].filter(x => !new_set.has(x)));
@@ -166,7 +175,7 @@ module.exports.editGroupList = function (req, res, next) {
 		}
 	});
 }
-
+//新增一个user 
 module.exports.addUser = function (req, res, next) {
 	let user_name = req.body.userName;
 	let group_list = req.body.groupList;

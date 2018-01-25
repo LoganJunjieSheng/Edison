@@ -180,3 +180,91 @@ groupList: music_dm_activate_src
 2018-01-24T09:58:17.142Z info:  删除了一个user
 username: sjj
 userName: test
+2018-01-24T10:27:15.847Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-24T10:27:23.882Z info:  增加了一个group
+username: sjj
+groupname: test
+descripition: 
+userList: 
+2018-01-24T10:27:27.653Z info:  删除了一个group
+username: sjj
+groupname: test
+2018-01-24T10:27:40.182Z info:  增加了一个group
+username: sjj
+groupname: test
+descripition: 1
+userList: draven.zhou
+2018-01-24T10:27:50.489Z info:  修改了一个group的userList
+username: sjj
+groupname: test
+userList: draven.zhou,liang.zhou,zhongzhou.dai,taiyou.zhang,high.he,flyfatasyzha,joe.xie
+2018-01-24T10:28:08.142Z info:  修改了一个group的desciption
+username: sjj
+groupname: test
+descripition: 111
+2018-01-24T10:28:12.339Z info:  修改了一个group的desciption
+username: sjj
+groupname: test
+descripition: 111
+2018-01-24T10:28:13.231Z info:  删除了一个group
+username: sjj
+groupname: test
+2018-01-24T10:28:26.909Z info:  增加一个user
+username: sjj
+userName: test
+groupList: data_crawler
+2018-01-24T10:28:30.459Z info:  删除了一个user
+username: sjj
+userName: test
+2018-01-24T10:28:36.276Z info:  增加一个user
+username: sjj
+userName: test
+groupList: 
+2018-01-24T10:28:39.944Z info:  修改了一个user的groupList
+username: sjj
+userName: test
+groupList: music_dm_activate_src
+2018-01-24T10:28:45.796Z info:  修改了一个user的groupList
+username: sjj
+userName: test
+groupList: audio_clock_dw_retention,data_ad
+2018-01-24T10:28:52.352Z info:  删除了一个user
+username: sjj
+userName: test
+2018-01-24T10:36:43.950Z info:  增加一个user
+username: sjj
+userName: test
+groupList: 
+2018-01-24T10:36:49.649Z info:  删除了一个user
+username: sjj
+userName: test
+2018-01-24T11:42:20.829Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-24T11:43:23.273Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-25T02:45:33.775Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-25T02:58:47.680Z info:  增加了一个group
+username: sjj
+groupname: test
+descripition: 
+userList: 
+2018-01-25T02:58:59.128Z info:  修改了一个group的userList
+username: sjj
+groupname: test
+userList: sylvia.yang
+2018-01-25T02:59:07.811Z info:  删除了一个group
+username: sjj
+groupname: test
+2018-01-25T02:59:26.811Z info:  增加一个user
+username: sjj
+userName: test
+groupList: 
+2018-01-25T02:59:31.338Z info:  修改了一个user的groupList
+username: sjj
+userName: test
+groupList: audio_clock_dw_retention
+2018-01-25T02:59:34.593Z info:  删除了一个user
+username: sjj
+userName: test
