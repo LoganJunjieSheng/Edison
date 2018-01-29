@@ -1,13 +1,8 @@
 module.exports.getRatio = function (req, res, next) {
-    let mysql = require('mysql');
-    let connection = mysql.createConnection({
-        host: 'rainbowdb01',
-        user: 'junjie.sheng',
-        password: 'TCDAvDol9gAczLav',
-        database: 'monitor'
-    });
-    let type = req.param('type');
-    let table = req.param('table');
+	let db = require('../mysql');
+	let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','monitor');
+    let type = req.body.type;
+    let table = req.body.table;
     let sql = 'select * from ' + table + ' where data_type=' + "'" + type + "'";
 
     connection.query(sql, function (err, results, fields) {

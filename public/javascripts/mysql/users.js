@@ -1,11 +1,6 @@
-let mysql = require('mysql');
 let async = require("async");
-let connection = mysql.createConnection({
-	host: 'rainbowdb01',
-	user: 'junjie.sheng',
-	password: 'TCDAvDol9gAczLav',
-	database: 'picasso'
-});
+let db = require('./config.js');
+let connection = db.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 exports.findById = function (id, cb) {
 	async.waterfall([
 		(callback) => {

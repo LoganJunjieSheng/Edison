@@ -1,13 +1,7 @@
 var mykafka = require('../kafka/mykafka');
 let async = require("async");
-let mysql = require('mysql');
-let connection = mysql.createConnection({
-	host: 'rainbowdb01',
-	user: 'junjie.sheng',
-	password: 'TCDAvDol9gAczLav',
-	database: 'picasso'
-});
-
+let db = require('../mysql');
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 //group 和 user 之间的关系包含在两个表中
 //  hadoop_group_meta
 //  group_name group_description
