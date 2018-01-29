@@ -10,10 +10,14 @@ router.get('/', passport.authenticate('jwt'), function (req, res, next) {
 });
 //往kafka传json数据
 router.post('/restartAndSwitch', passport.authenticate('jwt'), function (req, res, next) {
+ if(req.user.authority_authority_management==='1'){
 	let username = jwt.decode(req.headers.authorization.slice(7)).username;
 	restartAndSwitch.handleKafka(req, res, next);
 	logger.info('运维工具使用 \n' +
 		'username: ' + username + '\n' +
 		'operation: ' + req.body.operation + ' , server: ' + req.body.server + ' , option: ' + req.body.option)
+} else{
+        res.json({type:'noPermission'})
+    }
 });
 module.exports = router;
