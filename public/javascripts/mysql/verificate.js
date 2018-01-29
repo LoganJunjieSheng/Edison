@@ -1,11 +1,6 @@
-ql = require('mysql');
+let db = require('./config.js');
+let connection = db.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 let async = require("async");
-let connection = mysql.createConnection({
-	host: 'rainbowdb01',
-	user: 'junjie.sheng',
-	password: 'TCDAvDol9gAczLav',
-	database: 'picasso'
-});
 exports.verificate = function(username) {
 	async.waterfall([
 		(callback) => {
