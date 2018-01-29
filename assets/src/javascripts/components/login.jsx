@@ -49,7 +49,7 @@ export default class ModalPop extends React.PureComponent {
     }
     render() {
         const popoverLeft = (
-            <Popover  title="error">
+            <Popover  title="error" id='error'>
                 登录失败，请重新输入
             </Popover>
         );
@@ -70,7 +70,7 @@ export default class ModalPop extends React.PureComponent {
                 </FormGroup>
                 <ButtonToolbar>
                     <OverlayTrigger trigger="click" rootClose placement="bottom" overlay={popoverLeft}>
-                        <Button bsStyle={!(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.props.login} disable>Login</Button>
+                        <Button bsStyle={!(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.props.login} >Login</Button>
                     </OverlayTrigger>
                     <Button bsStyle={(this.state.Edison_token === undefined) ? 'default' : "primary"} onClick={this.signout}>Sign out</Button>
                     {/* <Button onClick={this.props.jwt} >Regist</Button> */}
