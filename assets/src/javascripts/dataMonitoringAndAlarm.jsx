@@ -69,7 +69,8 @@ export default class Alarm extends React.PureComponent {
                     pages: json.pages,
                 })
                 console.log(temp)
-            });
+            })
+            .catch((ex) => { console.log(ex); })
     }
     //处理多选框事件
     checkCheckbox = (id, index) => {

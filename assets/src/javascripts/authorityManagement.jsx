@@ -93,6 +93,7 @@ export default class Authority extends React.PureComponent {
                     // optionsGroup: json.groupName,
                 })
             })
+            .catch(ex => { console.log(ex) })
     }
     redirectToGroup = () => {
         fetch('http://bigdata-view.cootekservice.com:50056/authority/group/getData', {
