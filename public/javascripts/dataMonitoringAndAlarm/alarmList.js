@@ -1,13 +1,7 @@
 module.exports.getAlarmList = function (req, res, next) {
 	let async = require("async");
-	let mysql = require('mysql');
-	let connection = mysql.createConnection({
-		host: 'rainbowdb01',
-		user: 'junjie.sheng',
-		password: 'TCDAvDol9gAczLav',
-		database: 'monitor'
-	});
-	let sql = 'select * from alert order by status desc;';
+	let db = require('../mysql');
+	let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','monitor');
 	let activePage = req.body.activePage;
 	let alermList = [];
 	let pages = 0;
@@ -15,6 +9,7 @@ module.exports.getAlarmList = function (req, res, next) {
 	//waterfall可以将上一次的结果通过callback回调给下一次操作 
 	async.waterfall([
 		function (callback) {
+		let sql = 'select * from alert order by status desc;';
 			connection.query(sql, function (err, results, fields) {
 				if (err) throw err;
 				callback(err, results);
