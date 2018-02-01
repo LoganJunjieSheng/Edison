@@ -1,7 +1,7 @@
 let db = require('./config.js');
-let connection = db.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 let async = require("async");
 exports.verificate = function(username) {
+let connection = db.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		(callback) => {
 			let sql = 'select * from hadoop_admin_user where username = '+"'"+username+"'";

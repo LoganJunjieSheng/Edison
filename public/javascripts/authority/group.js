@@ -2,7 +2,6 @@ var mykafka = require('../kafka/mykafka');
 let async = require("async");
 let mysql = require('mysql');
 let db = require('../mysql');
-let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 
 //group 和 user 之间的关系包含在两个表中
 //  hadoop_group_meta
@@ -20,10 +19,12 @@ module.exports.getData = function (req, res, next) {
 	let groupName = []; //group数组
 	let userName = []; //users数组
 	let groupList = []; //[{group:,description:,userList:[]}]
+	let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		//读数据库
 		function (callback) {
 			let sql = 'select * from hadoop_group_meta;';
+	console.log(321)
 			connection.query(sql, function (err, results, fields) {
 				if (err) throw err;
 				callback(err, results);
@@ -84,6 +85,7 @@ module.exports.getData = function (req, res, next) {
 //删除指定的GROUP，同时删除GROUP对应的user_list
 module.exports.deleteGroup = function (req, res, next) {
 	let group_name = req.body.groupName; //GROUP的group_name
+	let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		//删除两个表中的GROUP对应的数据
 		function (callback) {
@@ -113,6 +115,7 @@ module.exports.editUserList = function (req, res, next) {
 	let user_list_old = []; //GROUP原来包含的userlist
 	let user_list_new = []; //GROUP要被更新的userlist
 	user_list_new = req.body.userList;
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		//读取groupname与user的映射关系
 		function (callback) {
@@ -190,6 +193,7 @@ module.exports.editUserList = function (req, res, next) {
 module.exports.editDescription = function (req, res, next) {
 	let group_name = req.body.groupName; //GROUP的group_name
 	let description = req.body.description //GROUP的group_descirption
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	//更新数据库
 	async.waterfall([
 		function (callback) {
@@ -224,6 +228,7 @@ module.exports.addGroup = function (req, res, next) {
 	let group_name = req.body.groupName;
 	let description = req.body.description;
 	let user_list = req.body.userList;
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		function (callback) {
 			let sql = {

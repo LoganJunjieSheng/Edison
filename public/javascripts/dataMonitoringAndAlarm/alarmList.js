@@ -1,10 +1,10 @@
 module.exports.getAlarmList = function (req, res, next) {
 	let async = require("async");
 	let db = require('../mysql');
-	let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','monitor');
 	let activePage = req.body.activePage;
 	let alermList = [];
 	let pages = 0;
+	let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','monitor');
 	//使用async进行流程控制，nodejs是异步非阻塞，读取mysql时，会执行后面的语句。
 	//waterfall可以将上一次的结果通过callback回调给下一次操作 
 	async.waterfall([

@@ -4,6 +4,8 @@ var passport = require('../public/javascripts/passport_config.js')
 var jwt = require('jsonwebtoken');
 var logger = require('../logs/config.js').logger
 let userPermission = require('../public/javascripts/userPermission');
+let db = require('../public/javascripts/mysql');
+
 router.get('/', function (req, res, next) {
 	res.sendfile(path.join(__dirname, 'index.html'));
 });
@@ -21,8 +23,9 @@ router.post('/test', passport.authenticate('local'), function (req, res) {
 });
 //用于验证本地的token是否有效的接口，测试用，无实际用处
 router.post('/jwt', passport.authenticate('jwt'), function (req, res) {
-	let test = () =>{console.log(123)}
-	userPermission.verificate.verificate('authority_operation',req.user,test)
+	//let test = () =>{console.log(123)}
+	//userPermission.verificate.verificate('authority_operation',req.user,test)
+	let connection = db.config.connect('elk01','root','picasso_superset','superset');	
 	res.json({
 		type: "success",
 	});
