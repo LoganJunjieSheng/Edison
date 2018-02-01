@@ -1,1 +1,38 @@
 # Edison
+本系统采用前后端分离的设计思想，浏览器负责渲染视图，通过调用ajax实现数据的展示。而服务器只提供api及数据。这样做的好处有很多，（1）将数据逻辑处理的部分放在前端实现，减少了前后端的耦合，增加了代码的可读性。（2）通过前端路由的配置，做到了页面的按需加载，用户访问网站是不需要加载网站所有的资源，同时服务器也不需要解析前端页面，提升了用户在页面交互上的体验。（3）降低了维护的成本，相较于传统的服务器渲染前端页面并返回，前后端分离由于前后端解耦，因此能够快递的定位问题的所在。（4）适用于多种平台，由于后端只负责提供api，当需要本系统适应其他平台时，只需要更改前端的代码。
+
+后端通过node.js中express框架实现，主要实现的功能有如下几点
+（1）对于mysql数据的增删改查
+（2）充当生产者，向kafka中发送消息队列
+（3）用户验证，
+（4）细粒度权限分割
+（5）日志存储
+（6）提供RESTful的api接口
+#express的功能介绍
+#npm
+#换源
+#mysql数据库连接
+mysql数据库操作主要用到了mysqljs这个Node.js中间件，通过cnpm install mysql安装mysqljs这个中间件。mysqljs这个中间件能够让node.js通过JavaScript语法去连接Mysq数据库。通过构建config.js这个配置文件简化Mysql数据库连接的复杂度。config.js这个模块暴露一个connect方法，connect方法接受四个参数host,user,password,database，对应了mysql中的host,user,password,database。将这四个参数传入mysqljs中的createConnection方法构建与对应mysql数据库的连接。之后做错误处理。当连接mysql的过程中出现错误，通过没2秒递归自己本身实现多次尝试。当mysql连接成功后，由于Mysql的参数wait_timeout参数默认为28800。它造成了一个连接与mysql连接后如果8小时（28800秒）没有任何操作，mysql会自动断开连接，而在mysqljs中这会抛出一个fatal error，这将直接导致node.js服务直接崩溃。而简单的将wait_timeout设置为一个更大数是一个治标不治本的办法，且wait_timeout如果设置为很大的话，高峰期会导致当大量连接滞留，对mysql以及服务器带来极大的影响。这题通过捕获PROTOCOL_CONNECTION_LOST这个err.code进行重连操作，巧妙的规避连接中断问题。
+
+#mysql数据库操作
+对于mysql数据库的操作主要分为增(INSERT)删(DELETE)改(UPDATE)查(SELECT)。mysqljs提供了一个简单的api：query(sql,function(err, results, fields){})。向query中传入sql语句,query将执行sql语句，并将执行完后得到的结果传入回调函数function中。
+但由于node.js的独特的异步非阻塞I/O特点，当query方法调用数据库时会导致短暂的阻塞，因此node.js会执行query方法后的代码，这导致了通过query方法获取到的数据库无法正确的保存在变量中。
+    #异步非阻塞I/O模型
+    #流程控制
+    这里通过引用async这个模块来进行流程控制， async提供了简单,强大的功能来处理异步的JavaScript操作。async类似于es6中的Async/Await，但它提供了健壮且丰富的api，帮助开发者处理异步操作。本系统用到async的了两个方法waterfall与map。waterfall通过传输一个数组化的function，按照数组内的顺序依次调用function,function通过传入的callback将信息传入下一个function中，这就使得原来异步非阻塞的mysql调用变得能够顺序执行， 同时紧跟着数组化传入waterfall中的function能够处理被抛出的错误。map则能够接受数组化的sql语句，并顺序且多次调用mysql数据库，并将数据顺序返回。
+
+#发送消息队列
+由于系统会与集群向连接，对于像Hadoop一样的日志数据和离线分析系统，数据通常是由于吞吐量的要求而通过处理日志和日志聚合来解决。Kafka是一种高吞吐量的分布式发布订阅消息系统，它可以处理消费者规模的网站中的所有动作流数据，因此对于集群的操作需要向kafka发送消息队列。
+发送kafka消息队列用到了kafka-node这个中间件，由于Node.js是发送消息队列方，因此Node.js是生产者(producer)。先通过kafka-node自带的Producer方法实例化一个与指定zookeeper的对象producer,_ZooKeeper是一个分布式的，开放源码的分布式应用程序协调服务，是Google的Chubby一个开源的实现，是Hadoop和Hbase的重要组件。它是一个为分布式应用提供一致性服务的软件，提供的功能包括：配置维护、域名服务、分布式同步、组服务等。_。 通过producer.on('ready', function () {})判断是否连接成功，如果成功执行function。在function中producer调用send方法将消息发送至zookeeper。同时使用producer.on('error', function (err) {})处理连接失败的情况。
+
+#登陆认证
+数据验证通过jsonwebtoken与passport这两个模块实现
+    jsonwebtoken_定义_ 在登录页面，用户输入username与password，react.js将获取到的username与password通过post请求发送给Node.js，其中password经过了MD5序列化，增加了安全性，防止用户信息泄露。而当Node.js通过解析post请求中的username与password并通过passport模块中的local Strategy与Mysql数据库内的信息做比较，如果匹配成功则通过jsonwebtoken模块生成一个包含以username为标识符的token，这个token的加密方式，秘钥，有效时间都可以自定义。
+    passport能够通过设置不同的Strategy来完成不同的登录验证，以默认的LocalStrategy为例，LocalStrategy配置为将req.user.username与req.user.password和mysql数据库中的user.username与user.password做匹配，匹配成功执行回调函数，并给回调函数传入user对象。在系统的mysql中，user不只有username和passoword字段，还有authority_authority_management，authority_data_monitor，authority_operation字段。这些字段将成为user的属性传给回调函数，在登录这个过程，这个回调函数通过jsonwebtoken模块生成一个包含以username为标识符的token，并发往浏览器，react.js将token保存到localstorage，做长期存储
+    每次用户通过post请求Node.js对mysql数据库进行操作时，react.js将localstorage中的token发往Node.js，Node.js通过passport-jwt自动解析token，如与mqsql数据库内的username字段匹配成功，则调用回调函数，并给回调函数传入一个user对象，这个user对象的属性为mqsql数据库中匹配成功行中的所有字段。在不同的路由中，通过判断req.user.authority_这个属性是非为真，从而执行不同的方法，这就完成了简单的细粒度划分。
+#日志存储
+日志对于问题定位、调试，系统性能调优至关重要，尤其是系统复杂以及在线运行的情况下。
+好的开发框架都会有一个可开启关闭/可配置记录级别的日志系统。我们从以下几个方面来做选型：
+1. 每行日志都需要有准确无误的时间戳
+2. 日志格式容易被人理解同时也容易被计算机进行分析处理
+3. 允许配置不同的日志输出，比如对于不同级别的日志配置不同的处理方式
