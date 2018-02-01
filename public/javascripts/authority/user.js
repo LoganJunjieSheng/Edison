@@ -1,7 +1,6 @@
 var mykafka = require('../kafka/mykafka');
 let async = require("async");
 let db = require('../mysql');
-let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 //group 和 user 之间的关系包含在两个表中
 //  hadoop_group_meta
 //  group_name group_description
@@ -16,6 +15,7 @@ module.exports.getData = function (req, res, next) {
 	let groupName = []; //group数组
 	let userName = []; //users数组
 	let userList = []; //[{user_name:'',group_number:'',group_list:[]}]
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		function (callback) {
 			let sql = 'select * from hadoop_group_meta;';
@@ -78,6 +78,7 @@ module.exports.getData = function (req, res, next) {
 //删除指定user
 module.exports.deleteUser = function (req, res, next) {
 	let user_name = req.body.userName;
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		function (callback) {
 			let sql = 'delete from hadoop_user_group where username =' + "'" + user_name + "'";
@@ -99,6 +100,7 @@ module.exports.editGroupList = function (req, res, next) {
 	let group_list_new = [];
 	let user_name = req.body.userName;
 	group_list_new = req.body.groupList;
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		function (callback) {
 			let sql = 'select * from hadoop_user_group where username =' + "'" + user_name + "'";
@@ -173,6 +175,7 @@ module.exports.editGroupList = function (req, res, next) {
 module.exports.addUser = function (req, res, next) {
 	let user_name = req.body.userName;
 	let group_list = req.body.groupList;
+let connection = db.config.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		function (callback) {
 			let tempParameter = [];

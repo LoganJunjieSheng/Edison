@@ -1,7 +1,7 @@
 let async = require("async");
 let db = require('./config.js');
-let connection = db.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 exports.findById = function (id, cb) {
+let connection = db.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		(callback) => {
 			let sql = 'select * from hadoop_admin_user;';
@@ -24,6 +24,7 @@ exports.findById = function (id, cb) {
 }
 
 exports.findByUsername = function (username, cb) {
+let connection = db.connect('rainbowdb01','junjie.sheng','TCDAvDol9gAczLav','picasso');
 	async.waterfall([
 		(callback) => {
 			let sql = 'select * from hadoop_admin_user;';

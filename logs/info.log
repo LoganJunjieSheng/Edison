@@ -20,3 +20,101 @@ username: sjj
 operation: restart , server: rainbow , option: restart
 2018-01-29T09:57:05.450Z info: action : 用户登录成功 
 username : t010  password : c1e20a1cf2da4175ad8414f8d1560a3c
+2018-01-29T10:03:57.018Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-29T10:04:34.025Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-29T10:05:07.823Z info: action : 用户登录成功 
+username : t001  password : 9dfbc2c9b1e17797e55062b21eaba4c3
+2018-01-29T10:07:43.034Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-29T10:13:12.029Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-29T10:13:18.040Z info:  增加了一个group
+username: sjj
+groupname: test
+descripition: 
+userList: 
+2018-01-29T10:13:20.740Z info:  删除了一个group
+username: sjj
+groupname: test
+2018-01-29T10:14:51.532Z info: action : 用户登录成功 
+username : t001  password : 9dfbc2c9b1e17797e55062b21eaba4c3
+2018-01-29T10:15:11.077Z info: action : 用户登录成功 
+username : t010  password : c1e20a1cf2da4175ad8414f8d1560a3c
+2018-01-29T10:15:18.103Z info:  增加了一个group
+username: t010
+groupname: test
+descripition: 
+userList: 
+2018-01-29T10:15:21.455Z info:  修改了一个group的userList
+username: t010
+groupname: test
+userList: liang.zhou
+2018-01-29T10:15:24.663Z info:  删除了一个group
+username: t010
+groupname: test
+2018-01-29T10:15:31.315Z info:  增加一个user
+username: t010
+userName: test
+groupList: 
+2018-01-29T10:15:35.763Z info:  修改了一个user的groupList
+username: t010
+userName: test
+groupList: music_dm_activate_src
+2018-01-29T10:15:39.019Z info:  删除了一个user
+username: t010
+userName: test
+2018-01-29T10:18:16.535Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-29T10:22:02.940Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-29T10:22:24.016Z info: action : 用户登录成功 
+username : t001  password : 9dfbc2c9b1e17797e55062b21eaba4c3
+2018-01-30T03:42:28.702Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-31T02:52:34.649Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-31T03:10:02.181Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-31T03:13:09.741Z info:  增加了一个group
+username: sjj
+groupname: test
+descripition: 
+userList: 
+2018-01-31T03:13:30.377Z info:  删除了一个group
+username: sjj
+groupname: test
+2018-01-31T03:14:54.481Z info:  修改了一个group的desciption
+username: sjj
+groupname: data_crawler
+descripition: 11
+2018-01-31T03:15:25.788Z info:  修改了一个group的desciption
+username: sjj
+groupname: data_crawler
+descripition: 
+2018-01-31T03:15:33.239Z info:  修改了一个group的desciption
+username: sjj
+groupname: data_crawler
+descripition: 11
+2018-01-31T05:57:27.410Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-31T05:57:32.933Z info: 运维工具使用 
+username: sjj
+operation: restart , server: Zeppelin , option: china
+2018-01-31T06:27:38.172Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-31T06:27:42.390Z info: 运维工具使用 
+username: sjj
+operation: restart , server: Zeppelin , option: china
+2018-01-31T07:05:56.062Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-31T07:06:00.129Z info: 运维工具使用 
+username: sjj
+operation: restart , server: Zeppelin , option: china
+2018-01-31T10:34:40.700Z info: action : 用户登录成功 
+username : sjj  password : a17d29a777773e0c1033bf995a9742f1
+2018-01-31T10:36:50.127Z info: ack一个报警
+username: sjj
+type: effective_activate_smartinput_cn
+description: undefined
