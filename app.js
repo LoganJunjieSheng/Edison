@@ -8,8 +8,7 @@ var operationAndMaintenanceTools = require('./routes/operationAndMaintenanceTool
 var dataMonitoringAndAlarm = require('./routes/dataMonitoringAndAlarm');
 var authority = require('./routes/authority')
 var allowCrossDomain = function (req, res, next) {
-  console.log(req.headers);
-  res.header('Access-Control-Allow-Origin', '192.168.1.48');
+  res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
   res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
   res.header('Access-Control-Allow-Credentials', 'true');
